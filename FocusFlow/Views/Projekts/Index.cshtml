@@ -1,0 +1,101 @@
+﻿@model IEnumerable<FocusFlow.Models.Projekt>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Projektreferenz)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beschreibung)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bewilligungsdatum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritaet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartdatumGeplant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EnddatumGeplant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartdatumEffektiv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EnddatumEffektiv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fortschritt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vorgehensmodell)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Projektreferenz)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beschreibung)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bewilligungsdatum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prioritaet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartdatumGeplant)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnddatumGeplant)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartdatumEffektiv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnddatumEffektiv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fortschritt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vorgehensmodell.VorgehensmodellId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProjektId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProjektId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProjektId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
