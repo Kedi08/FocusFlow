@@ -7,13 +7,9 @@ namespace FocusFlow.Models
         [Key]
         public int ExterneKostenId { get; set; }
 
-        public string Kostenart { get; set; }
+        public string? Kostenart { get; set; }
         public float Budget { get; set; }
-        public float KostenEffektiv { get; set; }
-        public string Abweichungsbegruendung { get; set; }
-
-        // Zuordnung zur Aktivität
-        public int AktivitaetId { get; set; }
-        public Aktivitaet Aktivitaet { get; set; }
+        public float? KostenEffektiv { get; set; }
+        public string? Abweichungsbegruendung { get; set; }
     }
 }

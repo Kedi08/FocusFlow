@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FocusFlow.Models.Mitarbeiter>
+
+@{
+    ViewData["Title"] = "MitarbeiterVerwaltung";
+}
+
+<h1>Mitarbeiterliste</h1>
+
+<p>
+    <a asp-action="Create">Mitarbeiter Registrieren</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Personalnummer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nachname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vorname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Abteilung)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Arbeitspensum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Funktion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Personalnummer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nachname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vorname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Abteilung)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Arbeitspensum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funktion)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MitarbeiterId">Bearbeiten</a> |
+                <a asp-action="Details" asp-route-id="@item.MitarbeiterId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MitarbeiterId">Löschen</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

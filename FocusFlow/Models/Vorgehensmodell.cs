@@ -8,9 +8,8 @@ namespace FocusFlow.Models
         [Key]
         public int VorgehensmodellId { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        // Ein Vorgehensmodell kann mehrere Projektphasen definieren
-        public ICollection<Projektphase> Phasen { get; set; }
+        public ICollection<Projektphase>? Projektphasen { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FocusFlow.Models
 {
@@ -6,12 +7,8 @@ namespace FocusFlow.Models
     {
         [Key]
         public int MeilensteinId { get; set; }
-
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public DateTime? Datum { get; set; }
-
-        // Ein Meilenstein gehört zu einem Projekt
-        public int ProjektId { get; set; }
-        public Projekt Projekt { get; set; }
+        public virtual Projektphase Projektphase { get; set; } = null!;
     }
 }

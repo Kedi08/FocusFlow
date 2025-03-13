@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FocusFlow.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,7 @@ namespace FocusFlow.Migrations
                     Vorname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Abteilung = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Arbeitspensum = table.Column<float>(type: "real", nullable: false),
-                    Rollen = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Funktion = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,18 +48,17 @@ namespace FocusFlow.Migrations
                 {
                     ProjektId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Projektreferenz = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Beschreibung = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bewilligungsdatum = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Prioritaet = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Prioritaet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartdatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EnddatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StartdatumEffektiv = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EnddatumEffektiv = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Fortschritt = table.Column<float>(type: "real", nullable: false),
-                    VorgehensmodellId = table.Column<int>(type: "int", nullable: true)
+                    Fortschritt = table.Column<float>(type: "real", nullable: true),
+                    VorgehensmodellId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,27 +67,7 @@ namespace FocusFlow.Migrations
                         name: "FK_Projekte_Vorgehensmodelle_VorgehensmodellId",
                         column: x => x.VorgehensmodellId,
                         principalTable: "Vorgehensmodelle",
-                        principalColumn: "VorgehensmodellId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Meilensteine",
-                columns: table => new
-                {
-                    MeilensteinId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Datum = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProjektId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Meilensteine", x => x.MeilensteinId);
-                    table.ForeignKey(
-                        name: "FK_Meilensteine_Projekte_ProjektId",
-                        column: x => x.ProjektId,
-                        principalTable: "Projekte",
-                        principalColumn: "ProjektId",
+                        principalColumn: "VorgehensmodellId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -122,6 +101,8 @@ namespace FocusFlow.Migrations
                 {
                     ProjektphaseId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProjektphaseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefinierteZeitspanne = table.Column<TimeSpan>(type: "time", nullable: true),
                     StartdatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EnddatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StartdatumEffektiv = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -129,10 +110,10 @@ namespace FocusFlow.Migrations
                     ReviewdatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ReviewdatumEffektiv = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Freigabedatum = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Freigabevermerk = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Fortschritt = table.Column<float>(type: "real", nullable: false),
-                    ProjektId = table.Column<int>(type: "int", nullable: false),
+                    Freigabevermerk = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fortschritt = table.Column<float>(type: "real", nullable: true),
+                    ProjektId = table.Column<int>(type: "int", nullable: true),
                     VorgehensmodellId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -142,8 +123,7 @@ namespace FocusFlow.Migrations
                         name: "FK_Projektphasen_Projekte_ProjektId",
                         column: x => x.ProjektId,
                         principalTable: "Projekte",
-                        principalColumn: "ProjektId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProjektId");
                     table.ForeignKey(
                         name: "FK_Projektphasen_Vorgehensmodelle_VorgehensmodellId",
                         column: x => x.VorgehensmodellId,
@@ -157,26 +137,49 @@ namespace FocusFlow.Migrations
                 {
                     AktivitaetId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartdatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EnddatumGeplant = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StartdatumEffektiv = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EnddatumEffektiv = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Budget = table.Column<float>(type: "real", nullable: false),
-                    KostenEffektiv = table.Column<float>(type: "real", nullable: false),
-                    Fortschritt = table.Column<float>(type: "real", nullable: false),
-                    VerantwortlichePersonId = table.Column<int>(type: "int", nullable: true),
-                    ProjektphaseId = table.Column<int>(type: "int", nullable: false)
+                    Budget = table.Column<float>(type: "real", nullable: true),
+                    KostenEffektiv = table.Column<float>(type: "real", nullable: true),
+                    Fortschritt = table.Column<float>(type: "real", nullable: true),
+                    ProjektphaseId = table.Column<int>(type: "int", nullable: false),
+                    MitarbeiterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Aktivitaeten", x => x.AktivitaetId);
                     table.ForeignKey(
-                        name: "FK_Aktivitaeten_Mitarbeiter_VerantwortlichePersonId",
-                        column: x => x.VerantwortlichePersonId,
+                        name: "FK_Aktivitaeten_Mitarbeiter_MitarbeiterId",
+                        column: x => x.MitarbeiterId,
                         principalTable: "Mitarbeiter",
-                        principalColumn: "MitarbeiterId");
+                        principalColumn: "MitarbeiterId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Aktivitaeten_Projektphasen_ProjektphaseId",
+                        column: x => x.ProjektphaseId,
+                        principalTable: "Projektphasen",
+                        principalColumn: "ProjektphaseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meilensteine",
+                columns: table => new
+                {
+                    MeilensteinId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Datum = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProjektphaseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meilensteine", x => x.MeilensteinId);
+                    table.ForeignKey(
+                        name: "FK_Meilensteine_Projektphasen_ProjektphaseId",
                         column: x => x.ProjektphaseId,
                         principalTable: "Projektphasen",
                         principalColumn: "ProjektphaseId",
@@ -192,9 +195,9 @@ namespace FocusFlow.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Typ = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Pfad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AktivitaetId = table.Column<int>(type: "int", nullable: true),
                     ProjektId = table.Column<int>(type: "int", nullable: true),
-                    ProjektphaseId = table.Column<int>(type: "int", nullable: true),
-                    AktivitaetId = table.Column<int>(type: "int", nullable: true)
+                    ProjektphaseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,11 +225,11 @@ namespace FocusFlow.Migrations
                 {
                     ExterneKostenId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Kostenart = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Kostenart = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Budget = table.Column<float>(type: "real", nullable: false),
-                    KostenEffektiv = table.Column<float>(type: "real", nullable: false),
-                    Abweichungsbegruendung = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AktivitaetId = table.Column<int>(type: "int", nullable: false)
+                    KostenEffektiv = table.Column<float>(type: "real", nullable: true),
+                    Abweichungsbegruendung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AktivitaetId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -235,8 +238,7 @@ namespace FocusFlow.Migrations
                         name: "FK_ExterneKosten_Aktivitaeten_AktivitaetId",
                         column: x => x.AktivitaetId,
                         principalTable: "Aktivitaeten",
-                        principalColumn: "AktivitaetId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AktivitaetId");
                 });
 
             migrationBuilder.CreateTable(
@@ -247,9 +249,9 @@ namespace FocusFlow.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Funktion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ZeitBudget = table.Column<float>(type: "real", nullable: false),
-                    ZeitEffektiv = table.Column<float>(type: "real", nullable: false),
-                    Abweichungsbegruendung = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AktivitaetId = table.Column<int>(type: "int", nullable: false)
+                    ZeitEffektiv = table.Column<float>(type: "real", nullable: true),
+                    Abweichungsbegruendung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AktivitaetId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -258,19 +260,18 @@ namespace FocusFlow.Migrations
                         name: "FK_PersonelleRessourcen_Aktivitaeten_AktivitaetId",
                         column: x => x.AktivitaetId,
                         principalTable: "Aktivitaeten",
-                        principalColumn: "AktivitaetId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AktivitaetId");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Aktivitaeten_MitarbeiterId",
+                table: "Aktivitaeten",
+                column: "MitarbeiterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Aktivitaeten_ProjektphaseId",
                 table: "Aktivitaeten",
                 column: "ProjektphaseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aktivitaeten_VerantwortlichePersonId",
-                table: "Aktivitaeten",
-                column: "VerantwortlichePersonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dokumente_AktivitaetId",
@@ -293,9 +294,9 @@ namespace FocusFlow.Migrations
                 column: "AktivitaetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Meilensteine_ProjektId",
+                name: "IX_Meilensteine_ProjektphaseId",
                 table: "Meilensteine",
-                column: "ProjektId");
+                column: "ProjektphaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MitarbeiterProjekt_ProjekteProjektId",

@@ -1,0 +1,102 @@
+﻿@model FocusFlow.Models.Projektphase
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Projektphase</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjektphaseName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjektphaseName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DefinierteZeitspanne)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DefinierteZeitspanne)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StartdatumGeplant)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartdatumGeplant)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnddatumGeplant)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnddatumGeplant)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StartdatumEffektiv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartdatumEffektiv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnddatumEffektiv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnddatumEffektiv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ReviewdatumGeplant)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ReviewdatumGeplant)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ReviewdatumEffektiv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ReviewdatumEffektiv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Freigabedatum)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Freigabedatum)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Freigabevermerk)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Freigabevermerk)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Fortschritt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Fortschritt)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Projekt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Projekt.ProjektId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Vorgehensmodell)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Vorgehensmodell.VorgehensmodellId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ProjektphaseId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

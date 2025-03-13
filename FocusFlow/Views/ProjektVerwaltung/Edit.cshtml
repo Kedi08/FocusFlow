@@ -14,11 +14,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProjektId" />
             <div class="form-group">
-                <label asp-for="Projektreferenz" class="control-label"></label>
-                <input asp-for="Projektreferenz" class="form-control" />
-                <span asp-validation-for="Projektreferenz" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Titel" class="control-label"></label>
                 <input asp-for="Titel" class="form-control" />
                 <span asp-validation-for="Titel" class="text-danger"></span>
@@ -67,11 +62,6 @@
                 <label asp-for="Fortschritt" class="control-label"></label>
                 <input asp-for="Fortschritt" class="form-control" />
                 <span asp-validation-for="Fortschritt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VorgehensmodellId" class="control-label"></label>
-                <select asp-for="VorgehensmodellId" class="form-control" asp-items="ViewBag.VorgehensmodellId"></select>
-                <span asp-validation-for="VorgehensmodellId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

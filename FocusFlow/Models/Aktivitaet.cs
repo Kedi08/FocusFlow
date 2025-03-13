@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FocusFlow.Models
 {
@@ -6,31 +7,24 @@ namespace FocusFlow.Models
     {
         [Key]
         public int AktivitaetId { get; set; }
+        public string Name { get; set; } = null!;
 
         public DateTime? StartdatumGeplant { get; set; }
         public DateTime? EnddatumGeplant { get; set; }
         public DateTime? StartdatumEffektiv { get; set; }
         public DateTime? EnddatumEffektiv { get; set; }
 
-        public float Budget { get; set; }
-        public float KostenEffektiv { get; set; }
-        public float Fortschritt { get; set; }
+        public float? Budget { get; set; }
+        public float? KostenEffektiv { get; set; }
+        public float? Fortschritt { get; set; }
 
-        // Verantwortliche Person (Mitarbeiter)
-        public int? VerantwortlichePersonId { get; set; }
-        public Mitarbeiter VerantwortlichePerson { get; set; }
+        // Verantwortlicher Mitarbeiter
+        [ForeignKey("Mitarbeiter")]
+        public int MitarbeiterId { get; set; }
+        public virtual Mitarbeiter Mitarbeiter { get; set; } = null!;
 
-        // Beziehung: Eine Aktivität gehört zu einer Projektphase
-        public int ProjektphaseId { get; set; }
-        public Projektphase Projektphase { get; set; }
-
-        // Personelle Ressourcen (0..*)
-        public ICollection<PersonelleRessource> Ressourcen { get; set; }
-
-        // Externe Kosten (0..*)
-        public ICollection<ExterneKosten> ExterneKosten { get; set; }
-
-        // Dokumente (0..*)
-        public ICollection<Dokument> Dokumente { get; set; }
+        public ICollection<PersonelleRessource>? Ressourcen { get; set; }
+        public ICollection<ExterneKosten>? ExterneKosten { get; set; }
+        public ICollection<Dokument>? Dokumente { get; set; }
     }
 }

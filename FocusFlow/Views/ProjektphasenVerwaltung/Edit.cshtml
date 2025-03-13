@@ -1,0 +1,99 @@
+﻿@model FocusFlow.Models.Projektphase
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Projektphase</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProjektphaseId" />
+            <div class="form-group">
+                <label asp-for="ProjektphaseName" class="control-label"></label>
+                <input asp-for="ProjektphaseName" class="form-control" />
+                <span asp-validation-for="ProjektphaseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DefinierteZeitspanne" class="control-label"></label>
+                <input asp-for="DefinierteZeitspanne" class="form-control" />
+                <span asp-validation-for="DefinierteZeitspanne" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartdatumGeplant" class="control-label"></label>
+                <input asp-for="StartdatumGeplant" class="form-control" />
+                <span asp-validation-for="StartdatumGeplant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EnddatumGeplant" class="control-label"></label>
+                <input asp-for="EnddatumGeplant" class="form-control" />
+                <span asp-validation-for="EnddatumGeplant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartdatumEffektiv" class="control-label"></label>
+                <input asp-for="StartdatumEffektiv" class="form-control" />
+                <span asp-validation-for="StartdatumEffektiv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EnddatumEffektiv" class="control-label"></label>
+                <input asp-for="EnddatumEffektiv" class="form-control" />
+                <span asp-validation-for="EnddatumEffektiv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReviewdatumGeplant" class="control-label"></label>
+                <input asp-for="ReviewdatumGeplant" class="form-control" />
+                <span asp-validation-for="ReviewdatumGeplant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReviewdatumEffektiv" class="control-label"></label>
+                <input asp-for="ReviewdatumEffektiv" class="form-control" />
+                <span asp-validation-for="ReviewdatumEffektiv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Freigabedatum" class="control-label"></label>
+                <input asp-for="Freigabedatum" class="form-control" />
+                <span asp-validation-for="Freigabedatum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Freigabevermerk" class="control-label"></label>
+                <input asp-for="Freigabevermerk" class="form-control" />
+                <span asp-validation-for="Freigabevermerk" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fortschritt" class="control-label"></label>
+                <input asp-for="Fortschritt" class="form-control" />
+                <span asp-validation-for="Fortschritt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjektId" class="control-label"></label>
+                <select asp-for="ProjektId" class="form-control" asp-items="ViewBag.ProjektId"></select>
+                <span asp-validation-for="ProjektId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VorgehensmodellId" class="control-label"></label>
+                <select asp-for="VorgehensmodellId" class="form-control" asp-items="ViewBag.VorgehensmodellId"></select>
+                <span asp-validation-for="VorgehensmodellId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

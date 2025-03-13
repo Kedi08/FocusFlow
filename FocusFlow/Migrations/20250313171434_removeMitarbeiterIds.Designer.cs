@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FocusFlow.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250312162631_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250313171434_removeMitarbeiterIds")]
+    partial class removeMitarbeiterIds
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace FocusFlow.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AktivitaetId"));
 
-                    b.Property<float>("Budget")
+                    b.Property<float?>("Budget")
                         .HasColumnType("real");
 
                     b.Property<DateTime?>("EnddatumEffektiv")
@@ -42,11 +42,18 @@ namespace FocusFlow.Migrations
                     b.Property<DateTime?>("EnddatumGeplant")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Fortschritt")
+                    b.Property<float?>("Fortschritt")
                         .HasColumnType("real");
 
-                    b.Property<float>("KostenEffektiv")
+                    b.Property<float?>("KostenEffektiv")
                         .HasColumnType("real");
+
+                    b.Property<int>("MitarbeiterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjektphaseId")
                         .HasColumnType("int");
@@ -57,14 +64,11 @@ namespace FocusFlow.Migrations
                     b.Property<DateTime?>("StartdatumGeplant")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("VerantwortlichePersonId")
-                        .HasColumnType("int");
-
                     b.HasKey("AktivitaetId");
 
-                    b.HasIndex("ProjektphaseId");
+                    b.HasIndex("MitarbeiterId");
 
-                    b.HasIndex("VerantwortlichePersonId");
+                    b.HasIndex("ProjektphaseId");
 
                     b.ToTable("Aktivitaeten");
                 });
@@ -118,20 +122,18 @@ namespace FocusFlow.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExterneKostenId"));
 
                     b.Property<string>("Abweichungsbegruendung")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AktivitaetId")
+                    b.Property<int?>("AktivitaetId")
                         .HasColumnType("int");
 
                     b.Property<float>("Budget")
                         .HasColumnType("real");
 
-                    b.Property<float>("KostenEffektiv")
+                    b.Property<float?>("KostenEffektiv")
                         .HasColumnType("real");
 
                     b.Property<string>("Kostenart")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ExterneKostenId");
@@ -156,12 +158,12 @@ namespace FocusFlow.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProjektId")
+                    b.Property<int>("ProjektphaseId")
                         .HasColumnType("int");
 
                     b.HasKey("MeilensteinId");
 
-                    b.HasIndex("ProjektId");
+                    b.HasIndex("ProjektphaseId");
 
                     b.ToTable("Meilensteine");
                 });
@@ -181,15 +183,15 @@ namespace FocusFlow.Migrations
                     b.Property<float>("Arbeitspensum")
                         .HasColumnType("real");
 
+                    b.Property<string>("Funktion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nachname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Personalnummer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Rollen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -211,10 +213,9 @@ namespace FocusFlow.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonelleRessourceId"));
 
                     b.Property<string>("Abweichungsbegruendung")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AktivitaetId")
+                    b.Property<int?>("AktivitaetId")
                         .HasColumnType("int");
 
                     b.Property<string>("Funktion")
@@ -224,7 +225,7 @@ namespace FocusFlow.Migrations
                     b.Property<float>("ZeitBudget")
                         .HasColumnType("real");
 
-                    b.Property<float>("ZeitEffektiv")
+                    b.Property<float?>("ZeitEffektiv")
                         .HasColumnType("real");
 
                     b.HasKey("PersonelleRessourceId");
@@ -255,15 +256,10 @@ namespace FocusFlow.Migrations
                     b.Property<DateTime?>("EnddatumGeplant")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Fortschritt")
+                    b.Property<float?>("Fortschritt")
                         .HasColumnType("real");
 
                     b.Property<string>("Prioritaet")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Projektreferenz")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartdatumEffektiv")
@@ -273,14 +269,13 @@ namespace FocusFlow.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Titel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("VorgehensmodellId")
+                    b.Property<int>("VorgehensmodellId")
                         .HasColumnType("int");
 
                     b.HasKey("ProjektId");
@@ -298,24 +293,30 @@ namespace FocusFlow.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjektphaseId"));
 
+                    b.Property<TimeSpan?>("DefinierteZeitspanne")
+                        .HasColumnType("time");
+
                     b.Property<DateTime?>("EnddatumEffektiv")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("EnddatumGeplant")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Fortschritt")
+                    b.Property<float?>("Fortschritt")
                         .HasColumnType("real");
 
                     b.Property<DateTime?>("Freigabedatum")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Freigabevermerk")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProjektId")
+                    b.Property<int?>("ProjektId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProjektphaseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReviewdatumEffektiv")
                         .HasColumnType("datetime2");
@@ -330,7 +331,6 @@ namespace FocusFlow.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("VorgehensmodellId")
@@ -379,80 +379,70 @@ namespace FocusFlow.Migrations
 
             modelBuilder.Entity("FocusFlow.Models.Aktivitaet", b =>
                 {
+                    b.HasOne("FocusFlow.Models.Mitarbeiter", "Mitarbeiter")
+                        .WithMany()
+                        .HasForeignKey("MitarbeiterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FocusFlow.Models.Projektphase", "Projektphase")
                         .WithMany("Aktivitaeten")
                         .HasForeignKey("ProjektphaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FocusFlow.Models.Mitarbeiter", "VerantwortlichePerson")
-                        .WithMany()
-                        .HasForeignKey("VerantwortlichePersonId");
+                    b.Navigation("Mitarbeiter");
 
                     b.Navigation("Projektphase");
-
-                    b.Navigation("VerantwortlichePerson");
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Dokument", b =>
                 {
-                    b.HasOne("FocusFlow.Models.Aktivitaet", "Aktivitaet")
+                    b.HasOne("FocusFlow.Models.Aktivitaet", null)
                         .WithMany("Dokumente")
                         .HasForeignKey("AktivitaetId");
 
-                    b.HasOne("FocusFlow.Models.Projekt", "Projekt")
+                    b.HasOne("FocusFlow.Models.Projekt", null)
                         .WithMany("Dokumente")
                         .HasForeignKey("ProjektId");
 
-                    b.HasOne("FocusFlow.Models.Projektphase", "Projektphase")
-                        .WithMany("Dokumente")
+                    b.HasOne("FocusFlow.Models.Projektphase", null)
+                        .WithMany("Meilensteine")
                         .HasForeignKey("ProjektphaseId");
-
-                    b.Navigation("Aktivitaet");
-
-                    b.Navigation("Projekt");
-
-                    b.Navigation("Projektphase");
                 });
 
             modelBuilder.Entity("FocusFlow.Models.ExterneKosten", b =>
                 {
-                    b.HasOne("FocusFlow.Models.Aktivitaet", "Aktivitaet")
+                    b.HasOne("FocusFlow.Models.Aktivitaet", null)
                         .WithMany("ExterneKosten")
-                        .HasForeignKey("AktivitaetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aktivitaet");
+                        .HasForeignKey("AktivitaetId");
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Meilenstein", b =>
                 {
-                    b.HasOne("FocusFlow.Models.Projekt", "Projekt")
-                        .WithMany("Meilensteine")
-                        .HasForeignKey("ProjektId")
+                    b.HasOne("FocusFlow.Models.Projektphase", "Projektphase")
+                        .WithMany()
+                        .HasForeignKey("ProjektphaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Projekt");
+                    b.Navigation("Projektphase");
                 });
 
             modelBuilder.Entity("FocusFlow.Models.PersonelleRessource", b =>
                 {
-                    b.HasOne("FocusFlow.Models.Aktivitaet", "Aktivitaet")
+                    b.HasOne("FocusFlow.Models.Aktivitaet", null)
                         .WithMany("Ressourcen")
-                        .HasForeignKey("AktivitaetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aktivitaet");
+                        .HasForeignKey("AktivitaetId");
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Projekt", b =>
                 {
                     b.HasOne("FocusFlow.Models.Vorgehensmodell", "Vorgehensmodell")
                         .WithMany()
-                        .HasForeignKey("VorgehensmodellId");
+                        .HasForeignKey("VorgehensmodellId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Vorgehensmodell");
                 });
@@ -461,15 +451,15 @@ namespace FocusFlow.Migrations
                 {
                     b.HasOne("FocusFlow.Models.Projekt", "Projekt")
                         .WithMany("Projektphasen")
-                        .HasForeignKey("ProjektId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjektId");
 
-                    b.HasOne("FocusFlow.Models.Vorgehensmodell", null)
-                        .WithMany("Phasen")
+                    b.HasOne("FocusFlow.Models.Vorgehensmodell", "Vorgehensmodell")
+                        .WithMany("Projektphasen")
                         .HasForeignKey("VorgehensmodellId");
 
                     b.Navigation("Projekt");
+
+                    b.Navigation("Vorgehensmodell");
                 });
 
             modelBuilder.Entity("MitarbeiterProjekt", b =>
@@ -500,8 +490,6 @@ namespace FocusFlow.Migrations
                 {
                     b.Navigation("Dokumente");
 
-                    b.Navigation("Meilensteine");
-
                     b.Navigation("Projektphasen");
                 });
 
@@ -509,12 +497,12 @@ namespace FocusFlow.Migrations
                 {
                     b.Navigation("Aktivitaeten");
 
-                    b.Navigation("Dokumente");
+                    b.Navigation("Meilensteine");
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Vorgehensmodell", b =>
                 {
-                    b.Navigation("Phasen");
+                    b.Navigation("Projektphasen");
                 });
 #pragma warning restore 612, 618
         }

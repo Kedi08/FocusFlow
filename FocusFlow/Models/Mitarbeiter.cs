@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FocusFlow.Models
 {
@@ -7,16 +8,12 @@ namespace FocusFlow.Models
         [Key]
         public int MitarbeiterId { get; set; }
 
-        public string Personalnummer { get; set; }
-        public string Nachname { get; set; }
-        public string Vorname { get; set; }
-        public string Abteilung { get; set; }
+        public string Personalnummer { get; set; } = string.Empty;
+        public string Nachname { get; set; } = string.Empty;
+        public string Vorname { get; set; } = string.Empty;
+        public string Abteilung { get; set; } = string.Empty;
         public float Arbeitspensum { get; set; }
-
-        // Rollen ggf. als JSON oder Komma-getrennte Liste
-        public string Rollen { get; set; }
-
-        // Many-to-Many: Ein Mitarbeiter kann in mehreren Projekten sein
-        public ICollection<Projekt> Projekte { get; set; }
+        [NotMapped]
+        public List<string>? Funktionen { get; set; }
     }
 }

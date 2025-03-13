@@ -24,12 +24,6 @@ namespace FocusFlow.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Beispiel für Many-to-Many bei Mitarbeiter <--> Projekt:
-            modelBuilder.Entity<Projekt>()
-                .HasMany(p => p.Mitarbeiter)
-                .WithMany(m => m.Projekte);
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }
