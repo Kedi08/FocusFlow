@@ -56,7 +56,7 @@ namespace FocusFlow.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MitarbeiterId,Personalnummer,Nachname,Vorname,Abteilung,Arbeitspensum,Funktion")] Mitarbeiter mitarbeiter)
+        public async Task<IActionResult> Create([Bind("MitarbeiterId,Personalnummer,Nachname,Vorname,Abteilung,Arbeitspensum")] Mitarbeiter mitarbeiter)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace FocusFlow.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MitarbeiterId,Personalnummer,Nachname,Vorname,Abteilung,Arbeitspensum,Funktion")] Mitarbeiter mitarbeiter)
+        public async Task<IActionResult> Edit(int id, [Bind("MitarbeiterId,Personalnummer,Nachname,Vorname,Abteilung,Arbeitspensum")] Mitarbeiter mitarbeiter)
         {
             if (id != mitarbeiter.MitarbeiterId)
             {

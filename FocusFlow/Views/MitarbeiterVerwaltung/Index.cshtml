@@ -1,20 +1,17 @@
 ﻿@model IEnumerable<FocusFlow.Models.Mitarbeiter>
 
 @{
-    ViewData["Title"] = "MitarbeiterVerwaltung";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Mitarbeiterliste</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Mitarbeiter Registrieren</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Personalnummer)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nachname)
             </th>
@@ -27,18 +24,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Arbeitspensum)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Funktion)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Personalnummer)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nachname)
             </td>
@@ -52,12 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Arbeitspensum)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Funktion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MitarbeiterId">Bearbeiten</a> |
+                <a asp-action="Edit" asp-route-id="@item.MitarbeiterId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.MitarbeiterId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MitarbeiterId">Löschen</a>
+                <a asp-action="Delete" asp-route-id="@item.MitarbeiterId">Delete</a>
             </td>
         </tr>
 }

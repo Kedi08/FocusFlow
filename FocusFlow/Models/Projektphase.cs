@@ -21,7 +21,7 @@ namespace FocusFlow.Models
         public string? Status { get; set; }
         public float? Fortschritt { get; set; }
         public ICollection<Aktivitaet>? Aktivitaeten { get; set; }
-        public ICollection<Dokument>? Meilensteine { get; set; }
+        public ICollection<Meilenstein>? Meilensteine { get; set; }
         public ICollection<Dokument>? Dokumente { get; set; }
     }
 }

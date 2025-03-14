@@ -11,6 +11,12 @@ namespace FocusFlow.Models
         public string Name { get; set; } = null!;
         public string Typ { get; set; } = null!;
         public string Pfad { get; set; } = null!;
+        //[ForeignKey("Projekt")]
+        //public int? ProjektId { get; set; }
+        //[ForeignKey("Projektphase")]
+        //public int? ProjektphaseId { get; set; }
+        //[ForeignKey("Aktivitaet")]
+        //public int? AktivitaetId { get; set; }
 
     }
 }

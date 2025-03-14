@@ -22,8 +22,8 @@ namespace FocusFlow.Models
 
         [ForeignKey("Mitarbeiter")]
         public int ProjektleiterId { get; set; }
-        public virtual Mitarbeiter Projektleiter { get; set; }
-        public  Vorgehensmodell Vorgehensmodell { get; set; }
+        public virtual Mitarbeiter? Projektleiter { get; set; }
+        public  Vorgehensmodell? Vorgehensmodell { get; set; }
         public ICollection<Dokument>? Dokumente { get; set; }
     }
 }

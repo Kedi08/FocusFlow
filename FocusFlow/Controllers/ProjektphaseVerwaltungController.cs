@@ -10,23 +10,24 @@ using FocusFlow.Models;
 
 namespace FocusFlow.Controllers
 {
-    public class ProjektphasenVerwaltungController : Controller
+    public class ProjektphaseVerwaltungController : Controller
     {
         private readonly AppDbContext _context;
 
-        public ProjektphasenVerwaltungController(AppDbContext context)
+        public ProjektphaseVerwaltungController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: ProjektphasenVerwaltung
+        // GET: ProjektphaseVerwaltung
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Projektphasen.Include(p => p.Projekt).Include(p => p.Vorgehensmodell);
-            return View(await appDbContext.ToListAsync());
+              return _context.Projektphasen != null ? 
+                          View(await _context.Projektphasen.ToListAsync()) :
+                          Problem("Entity set 'AppDbContext.Projektphasen'  is null.");
         }
 
-        // GET: ProjektphasenVerwaltung/Details/5
+        // GET: ProjektphaseVerwaltung/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Projektphasen == null)
@@ -35,8 +36,6 @@ namespace FocusFlow.Controllers
             }
 
             var projektphase = await _context.Projektphasen
-                .Include(p => p.Projekt)
-                .Include(p => p.Vorgehensmodell)
                 .FirstOrDefaultAsync(m => m.ProjektphaseId == id);
             if (projektphase == null)
             {
@@ -46,26 +45,18 @@ namespace FocusFlow.Controllers
             return View(projektphase);
         }
 
-        // GET: ProjektphasenVerwaltung/Create
+        // GET: ProjektphaseVerwaltung/Create
         public IActionResult Create()
         {
-            ViewBag.VorgehensmodellId = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "", Text = "Bitte wählen...", Selected = true }
-            }
-            .Concat(_context.Vorgehensmodelle
-                .Select(v => new SelectListItem { Value = v.VorgehensmodellId.ToString(), Text = v.Name }))
-            .ToList();
-
             return View();
         }
 
-        // POST: ProjektphasenVerwaltung/Create
+        // POST: ProjektphaseVerwaltung/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjektphaseId,ProjektphaseName,DefinierteZeitspanne,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,ReviewdatumGeplant,ReviewdatumEffektiv,Freigabedatum,Freigabevermerk,Status,Fortschritt,ProjektId,VorgehensmodellId")] Projektphase projektphase)
+        public async Task<IActionResult> Create([Bind("ProjektphaseId,ProjektphaseName,DefinierteZeitspanne,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,ReviewdatumGeplant,ReviewdatumEffektiv,Freigabedatum,Freigabevermerk,Status,Fortschritt")] Projektphase projektphase)
         {
             if (ModelState.IsValid)
             {
@@ -73,12 +64,10 @@ namespace FocusFlow.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjektId"] = new SelectList(_context.Projekte, "ProjektId", "ProjektId", projektphase.ProjektId);
-            ViewData["VorgehensmodellId"] = new SelectList(_context.Vorgehensmodelle, "VorgehensmodellId", "VorgehensmodellId", projektphase.VorgehensmodellId);
             return View(projektphase);
         }
 
-        // GET: ProjektphasenVerwaltung/Edit/5
+        // GET: ProjektphaseVerwaltung/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Projektphasen == null)
@@ -91,17 +80,15 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjektId"] = new SelectList(_context.Projekte, "ProjektId", "ProjektId", projektphase.ProjektId);
-            ViewData["VorgehensmodellId"] = new SelectList(_context.Vorgehensmodelle, "VorgehensmodellId", "VorgehensmodellId", projektphase.VorgehensmodellId);
             return View(projektphase);
         }
 
-        // POST: ProjektphasenVerwaltung/Edit/5
+        // POST: ProjektphaseVerwaltung/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjektphaseId,ProjektphaseName,DefinierteZeitspanne,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,ReviewdatumGeplant,ReviewdatumEffektiv,Freigabedatum,Freigabevermerk,Status,Fortschritt,ProjektId,VorgehensmodellId")] Projektphase projektphase)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjektphaseId,ProjektphaseName,DefinierteZeitspanne,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,ReviewdatumGeplant,ReviewdatumEffektiv,Freigabedatum,Freigabevermerk,Status,Fortschritt")] Projektphase projektphase)
         {
             if (id != projektphase.ProjektphaseId)
             {
@@ -128,12 +115,10 @@ namespace FocusFlow.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjektId"] = new SelectList(_context.Projekte, "ProjektId", "ProjektId", projektphase.ProjektId);
-            ViewData["VorgehensmodellId"] = new SelectList(_context.Vorgehensmodelle, "VorgehensmodellId", "VorgehensmodellId", projektphase.VorgehensmodellId);
             return View(projektphase);
         }
 
-        // GET: ProjektphasenVerwaltung/Delete/5
+        // GET: ProjektphaseVerwaltung/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Projektphasen == null)
@@ -142,8 +127,6 @@ namespace FocusFlow.Controllers
             }
 
             var projektphase = await _context.Projektphasen
-                .Include(p => p.Projekt)
-                .Include(p => p.Vorgehensmodell)
                 .FirstOrDefaultAsync(m => m.ProjektphaseId == id);
             if (projektphase == null)
             {
@@ -153,7 +136,7 @@ namespace FocusFlow.Controllers
             return View(projektphase);
         }
 
-        // POST: ProjektphasenVerwaltung/Delete/5
+        // POST: ProjektphaseVerwaltung/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

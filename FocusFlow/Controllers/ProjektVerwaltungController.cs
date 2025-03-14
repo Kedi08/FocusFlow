@@ -22,9 +22,8 @@ namespace FocusFlow.Controllers
         // GET: ProjektVerwaltung
         public async Task<IActionResult> Index()
         {
-              return _context.Projekte != null ? 
-                          View(await _context.Projekte.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Projekte'  is null.");
+            var appDbContext = _context.Projekte.Include(p => p.Projektleiter);
+            return View(await appDbContext.ToListAsync());
         }
 
         // GET: ProjektVerwaltung/Details/5
@@ -36,6 +35,7 @@ namespace FocusFlow.Controllers
             }
 
             var projekt = await _context.Projekte
+                .Include(p => p.Projektleiter)
                 .FirstOrDefaultAsync(m => m.ProjektId == id);
             if (projekt == null)
             {
@@ -48,24 +48,7 @@ namespace FocusFlow.Controllers
         // GET: ProjektVerwaltung/Create
         public IActionResult Create()
         {
-            // bsp für laden von virtual
-            //var projekt = _context.Projekte
-            //    .Include(p => p.Projektphase)
-            //    .FirstOrDefault(p => p.Id == id);
-
-
-            ViewBag.VorgehensmodellListe = _context.Vorgehensmodelle.Select(vm => new SelectListItem
-            {
-                Value = vm.VorgehensmodellId.ToString(),
-                Text = vm.Name
-            }).ToList();
-
-            ViewBag.MitarbeiterListe = _context.Mitarbeiter.Select(m => new SelectListItem
-            {
-                Value = m.MitarbeiterId.ToString(),
-                Text = $"{m.Vorname} {m.Nachname}"
-            }).ToList();
-
+            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId");
             return View();
         }
 
@@ -74,36 +57,15 @@ namespace FocusFlow.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjektId,Titel,Beschreibung,Bewilligungsdatum,Prioritaet,Status,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,Fortschritt")] Projekt projekt, List<int> MitarbeiterIds, int VorgehensmodellId)
+        public async Task<IActionResult> Create([Bind("ProjektId,Titel,Beschreibung,Bewilligungsdatum,Prioritaet,Status,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,Fortschritt,ProjektleiterId")] Projekt projekt)
         {
-            var vorgehensmodell = _context.Vorgehensmodelle.Find(VorgehensmodellId);
-            if (vorgehensmodell != null)
-            {
-                projekt.Vorgehensmodell = vorgehensmodell;
-            }
-            // Mitarbeiter dem Projekt zuweisen (falls notwendig)
-            if (MitarbeiterIds != null && MitarbeiterIds.Any())
-            {
-                projekt.Mitarbeiter = _context.Mitarbeiter.Where(m => MitarbeiterIds.Contains(m.MitarbeiterId)).ToList();
-            }
             if (ModelState.IsValid)
             {
                 _context.Add(projekt);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            // Falls Fehler auftreten, muss die Liste erneut geladen werden
-            ViewBag.VorgehensmodellListe = _context.Vorgehensmodelle.Select(vm => new SelectListItem
-            {
-                Value = vm.VorgehensmodellId.ToString(),
-                Text = vm.Name
-            }).ToList();
-            // Falls Fehler auftreten, muss die Liste erneut geladen werden
-            ViewBag.MitarbeiterListe = _context.Mitarbeiter.Select(m => new SelectListItem
-            {
-                Value = m.MitarbeiterId.ToString(),
-                Text = $"{m.Vorname} {m.Nachname}"
-            }).ToList();
+            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId", projekt.ProjektleiterId);
             return View(projekt);
         }
 
@@ -120,6 +82,7 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
+            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId", projekt.ProjektleiterId);
             return View(projekt);
         }
 
@@ -128,7 +91,7 @@ namespace FocusFlow.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjektId,Titel,Beschreibung,Bewilligungsdatum,Prioritaet,Status,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,Fortschritt")] Projekt projekt)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjektId,Titel,Beschreibung,Bewilligungsdatum,Prioritaet,Status,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,Fortschritt,ProjektleiterId")] Projekt projekt)
         {
             if (id != projekt.ProjektId)
             {
@@ -155,6 +118,7 @@ namespace FocusFlow.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId", projekt.ProjektleiterId);
             return View(projekt);
         }
 
@@ -167,6 +131,7 @@ namespace FocusFlow.Controllers
             }
 
             var projekt = await _context.Projekte
+                .Include(p => p.Projektleiter)
                 .FirstOrDefaultAsync(m => m.ProjektId == id);
             if (projekt == null)
             {

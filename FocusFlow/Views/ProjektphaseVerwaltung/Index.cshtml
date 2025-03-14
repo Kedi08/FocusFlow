@@ -48,12 +48,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Fortschritt)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projekt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vorgehensmodell)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -95,12 +89,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Fortschritt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Projekt.ProjektId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vorgehensmodell.VorgehensmodellId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProjektphaseId">Edit</a> |

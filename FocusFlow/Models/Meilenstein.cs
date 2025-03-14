@@ -9,6 +9,5 @@ namespace FocusFlow.Models
         public int MeilensteinId { get; set; }
         public string Name { get; set; } = null!;
         public DateTime? Datum { get; set; }
-        public virtual Projektphase Projektphase { get; set; } = null!;
     }
 }
