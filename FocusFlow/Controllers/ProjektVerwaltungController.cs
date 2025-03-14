@@ -55,17 +55,60 @@ namespace FocusFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Projekt projekt)
+        public async Task<IActionResult> Create(Projekt projekt, int VorlageVorgehensmodellId)
         {
-
             if (ModelState.IsValid)
             {
+                // Vorgehensmodell-Vorlage mit allen Phasen aus der DB laden
+                var originalVorgehensmodell = await _context.Vorgehensmodelle
+                    .Include(vm => vm.Projektphasen) // Lade alle zugehörigen Projektphasen
+                    .FirstOrDefaultAsync(vm => vm.VorgehensmodellId == VorlageVorgehensmodellId);
+
+                if (originalVorgehensmodell == null)
+                {
+                    ModelState.AddModelError("", "Das gewählte Vorgehensmodell existiert nicht.");
+                    return View(projekt);
+                }
+
+                // Eine neue Kopie des Vorgehensmodells erstellen
+                var neuesVorgehensmodell = new Vorgehensmodell
+                {
+                    Name = originalVorgehensmodell.Name,
+                    IstVorlage = false, // Es soll KEINE Vorlage sein
+                    Projektphasen = new List<Projektphase>()
+                };
+
+                // Kopiere alle Projektphasen und verknüpfe sie mit dem neuen Vorgehensmodell
+                foreach (var phase in originalVorgehensmodell.Projektphasen)
+                {
+                    var neuePhase = new Projektphase
+                    {
+                        ProjektphaseName = phase.ProjektphaseName,
+                        DauerInTagen = phase.DauerInTagen,
+                        Vorgehensmodell = neuesVorgehensmodell 
+                    };
+
+                    neuesVorgehensmodell.Projektphasen.Add(neuePhase);
+                }
+
+                // Neues Vorgehensmodell dem Projekt zuweisen
+                projekt.Vorgehensmodell = neuesVorgehensmodell;
+
+                // 5️⃣ Projekt speichern (inkl. Vorgehensmodell + Phasen)
                 _context.Add(projekt);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VorlageVorgehensmodellId"] = new SelectList(_context.Vorgehensmodelle.Where(vm => vm.IstVorlage), "VorgehensmodellId", "Name");
-            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter.Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }), "MitarbeiterId", "Name");
+
+            // 6️⃣ Falls Fehler auftreten, DropDown-Menüs erneut befüllen
+            ViewData["VorlageVorgehensmodellId"] = new SelectList(
+                _context.Vorgehensmodelle.Where(vm => vm.IstVorlage), "VorgehensmodellId", "Name");
+
+            ViewData["ProjektleiterId"] = new SelectList(
+                _context.Mitarbeiter.Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }),
+                "MitarbeiterId", "Name");
+
             return View(projekt);
         }
 

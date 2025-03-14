@@ -12,6 +12,6 @@ namespace FocusFlow.Models
 
         public bool IstVorlage { get; set; }
 
-        public ICollection<Projektphase>? Projektphasen { get; set; }
+        public ICollection<Projektphase> Projektphasen { get; set; } = new List<Projektphase>();
     }
 }

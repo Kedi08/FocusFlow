@@ -8,7 +8,8 @@ namespace FocusFlow.Models
         [Key]
         public int ProjektphaseId { get; set; }
         public string ProjektphaseName { get; set; } = null!;
-        public TimeSpan? DefinierteZeitspanne { get; set; }
+        public int DauerInTagen { get; set; }
+        public double Reihenfolge { get; set; }
         public DateTime? StartdatumGeplant { get; set; }
         public DateTime? EnddatumGeplant { get; set; }
         public DateTime? StartdatumEffektiv { get; set; }
@@ -23,5 +24,9 @@ namespace FocusFlow.Models
         public ICollection<Aktivitaet>? Aktivitaeten { get; set; }
         public ICollection<Meilenstein>? Meilensteine { get; set; }
         public ICollection<Dokument>? Dokumente { get; set; }
+
+        [ForeignKey("Vorgehensmodell")]
+        public int VorgehensmodellId { get; set; }
+        public Vorgehensmodell Vorgehensmodell { get; set; } = null!;
     }
 }

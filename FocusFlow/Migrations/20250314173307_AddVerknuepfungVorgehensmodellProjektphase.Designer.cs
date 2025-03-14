@@ -4,6 +4,7 @@ using FocusFlow.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FocusFlow.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250314173307_AddVerknuepfungVorgehensmodellProjektphase")]
+    partial class AddVerknuepfungVorgehensmodellProjektphase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,8 +297,8 @@ namespace FocusFlow.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjektphaseId"));
 
-                    b.Property<int>("DauerInTagen")
-                        .HasColumnType("int");
+                    b.Property<TimeSpan?>("DefinierteZeitspanne")
+                        .HasColumnType("time");
 
                     b.Property<DateTime?>("EnddatumEffektiv")
                         .HasColumnType("datetime2");
@@ -315,9 +318,6 @@ namespace FocusFlow.Migrations
                     b.Property<string>("ProjektphaseName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Reihenfolge")
-                        .HasColumnType("float");
 
                     b.Property<DateTime?>("ReviewdatumEffektiv")
                         .HasColumnType("datetime2");
