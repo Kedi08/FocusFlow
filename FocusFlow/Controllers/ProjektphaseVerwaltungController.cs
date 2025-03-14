@@ -52,11 +52,9 @@ namespace FocusFlow.Controllers
         }
 
         // POST: ProjektphaseVerwaltung/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjektphaseId,ProjektphaseName,DefinierteZeitspanne,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,ReviewdatumGeplant,ReviewdatumEffektiv,Freigabedatum,Freigabevermerk,Status,Fortschritt")] Projektphase projektphase)
+        public async Task<IActionResult> Create(Projektphase projektphase)
         {
             if (ModelState.IsValid)
             {
@@ -84,11 +82,9 @@ namespace FocusFlow.Controllers
         }
 
         // POST: ProjektphaseVerwaltung/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjektphaseId,ProjektphaseName,DefinierteZeitspanne,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,ReviewdatumGeplant,ReviewdatumEffektiv,Freigabedatum,Freigabevermerk,Status,Fortschritt")] Projektphase projektphase)
+        public async Task<IActionResult> Edit(int id,   Projektphase projektphase)
         {
             if (id != projektphase.ProjektphaseId)
             {

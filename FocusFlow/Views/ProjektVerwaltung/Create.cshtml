@@ -23,11 +23,6 @@
                 <span asp-validation-for="Beschreibung" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Bewilligungsdatum" class="control-label"></label>
-                <input asp-for="Bewilligungsdatum" class="form-control" />
-                <span asp-validation-for="Bewilligungsdatum" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Prioritaet" class="control-label"></label>
                 <input asp-for="Prioritaet" class="form-control" />
                 <span asp-validation-for="Prioritaet" class="text-danger"></span>
@@ -48,24 +43,14 @@
                 <span asp-validation-for="EnddatumGeplant" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartdatumEffektiv" class="control-label"></label>
-                <input asp-for="StartdatumEffektiv" class="form-control" />
-                <span asp-validation-for="StartdatumEffektiv" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnddatumEffektiv" class="control-label"></label>
-                <input asp-for="EnddatumEffektiv" class="form-control" />
-                <span asp-validation-for="EnddatumEffektiv" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fortschritt" class="control-label"></label>
-                <input asp-for="Fortschritt" class="form-control" />
-                <span asp-validation-for="Fortschritt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ProjektleiterId" class="control-label"></label>
-                <select asp-for="ProjektleiterId" class ="form-control" asp-items="ViewBag.ProjektleiterId"></select>
+                <select asp-for="ProjektleiterId" class="form-control" asp-items="ViewBag.ProjektleiterId"></select>
             </div>
+            <div class="form-group">
+                <label asp-for="Vorgehensmodell" class="control-label"></label>
+                <select asp-for="Vorgehensmodell" class="form-control" asp-items="ViewBag.VorlageVorgehensmodellId"></select>
+            </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

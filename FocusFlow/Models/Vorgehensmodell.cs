@@ -10,6 +10,8 @@ namespace FocusFlow.Models
 
         public string Name { get; set; } = null!;
 
+        public bool IstVorlage { get; set; }
+
         public ICollection<Projektphase>? Projektphasen { get; set; }
     }
 }

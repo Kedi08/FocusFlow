@@ -48,24 +48,24 @@ namespace FocusFlow.Controllers
         // GET: ProjektVerwaltung/Create
         public IActionResult Create()
         {
-            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId");
+            ViewBag.VorlageVorgehensmodellId = new SelectList(_context.Vorgehensmodelle.Where(vm => vm.IstVorlage), "VorgehensmodellId", "Name");
+            ViewBag.ProjektleiterId = new SelectList(_context.Mitarbeiter.Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }), "MitarbeiterId", "Name");
             return View();
         }
 
-        // POST: ProjektVerwaltung/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjektId,Titel,Beschreibung,Bewilligungsdatum,Prioritaet,Status,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,Fortschritt,ProjektleiterId")] Projekt projekt)
+        public async Task<IActionResult> Create(Projekt projekt)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(projekt);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId", projekt.ProjektleiterId);
+            ViewData["VorlageVorgehensmodellId"] = new SelectList(_context.Vorgehensmodelle.Where(vm => vm.IstVorlage), "VorgehensmodellId", "Name");
+            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter.Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }), "MitarbeiterId", "Name");
             return View(projekt);
         }
 
@@ -86,12 +86,10 @@ namespace FocusFlow.Controllers
             return View(projekt);
         }
 
-        // POST: ProjektVerwaltung/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjektId,Titel,Beschreibung,Bewilligungsdatum,Prioritaet,Status,StartdatumGeplant,EnddatumGeplant,StartdatumEffektiv,EnddatumEffektiv,Fortschritt,ProjektleiterId")] Projekt projekt)
+        public async Task<IActionResult> Edit(int id, Projekt projekt)
         {
             if (id != projekt.ProjektId)
             {

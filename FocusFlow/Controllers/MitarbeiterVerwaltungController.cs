@@ -50,13 +50,10 @@ namespace FocusFlow.Controllers
         {
             return View();
         }
-
-        // POST: MitarbeiterVerwaltung/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MitarbeiterId,Personalnummer,Nachname,Vorname,Abteilung,Arbeitspensum")] Mitarbeiter mitarbeiter)
+        // POST: MitarbeiterVerwaltung/Create
+        public async Task<IActionResult> Create(Mitarbeiter mitarbeiter)
         {
             if (ModelState.IsValid)
             {
@@ -82,13 +79,9 @@ namespace FocusFlow.Controllers
             }
             return View(mitarbeiter);
         }
-
-        // POST: MitarbeiterVerwaltung/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MitarbeiterId,Personalnummer,Nachname,Vorname,Abteilung,Arbeitspensum")] Mitarbeiter mitarbeiter)
+        public async Task<IActionResult> Edit(int id, Mitarbeiter mitarbeiter)
         {
             if (id != mitarbeiter.MitarbeiterId)
             {

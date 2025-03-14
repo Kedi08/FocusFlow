@@ -13,7 +13,6 @@ namespace FocusFlow.Models
         public string Vorname { get; set; } = string.Empty;
         public string Abteilung { get; set; } = string.Empty;
         public float Arbeitspensum { get; set; }
-        [NotMapped]
-        public List<string>? Funktionen { get; set; }
+        public string? Funktionen { get; set; }
     }
 }

@@ -22,8 +22,9 @@ namespace FocusFlow.Controllers
         // GET: VorgehensmodellVerwaltung
         public async Task<IActionResult> Index()
         {
+            //nur vorlagen sind sichtbar!
               return _context.Vorgehensmodelle != null ? 
-                          View(await _context.Vorgehensmodelle.ToListAsync()) :
+                          View(await _context.Vorgehensmodelle.Where(vm => vm.IstVorlage).ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Vorgehensmodelle'  is null.");
         }
 
@@ -52,12 +53,11 @@ namespace FocusFlow.Controllers
         }
 
         // POST: VorgehensmodellVerwaltung/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VorgehensmodellId,Name")] Vorgehensmodell vorgehensmodell)
+        public async Task<IActionResult> Create(Vorgehensmodell vorgehensmodell)
         {
+            vorgehensmodell.IstVorlage = true;
             if (ModelState.IsValid)
             {
                 _context.Add(vorgehensmodell);
@@ -84,11 +84,9 @@ namespace FocusFlow.Controllers
         }
 
         // POST: VorgehensmodellVerwaltung/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VorgehensmodellId,Name")] Vorgehensmodell vorgehensmodell)
+        public async Task<IActionResult> Edit(int id, Vorgehensmodell vorgehensmodell)
         {
             if (id != vorgehensmodell.VorgehensmodellId)
             {
