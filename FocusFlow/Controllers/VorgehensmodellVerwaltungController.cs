@@ -24,7 +24,7 @@ namespace FocusFlow.Controllers
         {
             //nur vorlagen sind sichtbar!
               return _context.Vorgehensmodelle != null ? 
-                          View(await _context.Vorgehensmodelle/*.Where(vm => vm.IstVorlage)*/.ToListAsync()) :
+                          View(await _context.Vorgehensmodelle.Where(vm => vm.IstVorlage).ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Vorgehensmodelle'  is null.");
         }
 
@@ -55,44 +55,28 @@ namespace FocusFlow.Controllers
         // POST: VorgehensmodellVerwaltung/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Vorgehensmodell vorgehensmodell, List<Projektphase> Projektphasen)
+        public async Task<IActionResult> Create(Vorgehensmodell vorgehensmodell, List<Projektphase> projektphasen)
         {
-            // Erst Anpassungen machen, bevor ModelState geprüft wird
             vorgehensmodell.IstVorlage = true;
 
-            if (Projektphasen != null && Projektphasen.Any()) // Prüfen, ob Phasen vorhanden sind
+            if (projektphasen != null && projektphasen.Any())
             {
-                // Setze die Reihenfolge als Double (1.0, 2.0, 3.0)
-                for (int i = 0; i < Projektphasen.Count; i++)
+                for (int i = 0; i < projektphasen.Count; i++)
                 {
-                    Projektphasen[i].Reihenfolge = (double)(i + 1); // Vermeidet Probleme beim Einfügen neuer Phasen
-                    Projektphasen[i].Vorgehensmodell = vorgehensmodell;
-                    Projektphasen[i].VorgehensmodellId = vorgehensmodell.VorgehensmodellId;
-                    Projektphasen[i].Status = "Neu";
+                    projektphasen[i].Reihenfolge = i + 1;
+                    projektphasen[i].Vorgehensmodell = vorgehensmodell;
                 }
-
-                // Projektphasen zur Vorlage hinzufügen
-                vorgehensmodell.Projektphasen = Projektphasen;
+                vorgehensmodell.Projektphasen = projektphasen;
             }
+
             if (ModelState.IsValid)
             {
                 _context.Add(vorgehensmodell);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }else
-            {
-                foreach (var key in ModelState.Keys)
-                {
-                    var errors = ModelState[key].Errors;
-                    foreach (var error in errors)
-                    {
-                        Console.WriteLine($"Fehler in Feld '{key}': {error.ErrorMessage}");
-                    }
-                }
             }
 
-                // Falls Fehler auftreten, View erneut mit Daten anzeigen
-                return View(vorgehensmodell);
+            return View(vorgehensmodell);
         }
 
         // GET: VorgehensmodellVerwaltung/Edit/5

@@ -35,20 +35,24 @@
             <div class="form-group">
                 <label asp-for="StartdatumGeplant" class="control-label"></label>
                 <input asp-for="StartdatumGeplant" class="form-control" />
-                <span asp-validation-for="StartdatumGeplant" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EnddatumGeplant" class="control-label"></label>
                 <input asp-for="EnddatumGeplant" class="form-control" />
-                <span asp-validation-for="EnddatumGeplant" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjektleiterId" class="control-label"></label>
-                <select asp-for="ProjektleiterId" class="form-control" asp-items="ViewBag.ProjektleiterId"></select>
+                <select asp-for="ProjektleiterId" class="form-control" asp-items="ViewBag.ProjektleiterId">
+                    <option value="">-- Bitte wählen --</option>
+                </select>
+                <span asp-validation-for="ProjektleiterId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Vorgehensmodell" class="control-label"></label>
-                <select asp-for="Vorgehensmodell" class="form-control" asp-items="ViewBag.VorlageVorgehensmodellId"></select>
+                <label asp-for="Vorgehensmodell" class="control-label">Vorgehensmodell-Vorlage</label>
+                <select asp-for="Vorgehensmodell" class="form-control" asp-items="ViewBag.VorlageVorgehensmodellId">
+                    <option value="">-- Bitte Vorlage wählen --</option>
+                </select>
             </div>
             <br />
             <div class="form-group">

@@ -67,7 +67,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("ProjektphaseId");
 
-                    b.ToTable("Aktivitaeten");
+                    b.ToTable("Aktivitaeten", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Dokument", b =>
@@ -107,7 +107,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("ProjektphaseId");
 
-                    b.ToTable("Dokumente");
+                    b.ToTable("Dokumente", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.ExterneKosten", b =>
@@ -137,7 +137,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("AktivitaetId");
 
-                    b.ToTable("ExterneKosten");
+                    b.ToTable("ExterneKosten", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Meilenstein", b =>
@@ -162,7 +162,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("ProjektphaseId");
 
-                    b.ToTable("Meilensteine");
+                    b.ToTable("Meilensteine", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Mitarbeiter", b =>
@@ -197,7 +197,7 @@ namespace FocusFlow.Migrations
 
                     b.HasKey("MitarbeiterId");
 
-                    b.ToTable("Mitarbeiter");
+                    b.ToTable("Mitarbeiter", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.PersonelleRessource", b =>
@@ -228,7 +228,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("AktivitaetId");
 
-                    b.ToTable("PersonelleRessourcen");
+                    b.ToTable("PersonelleRessourcen", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Projekt", b =>
@@ -283,7 +283,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("VorgehensmodellId");
 
-                    b.ToTable("Projekte");
+                    b.ToTable("Projekte", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Projektphase", b =>
@@ -341,7 +341,7 @@ namespace FocusFlow.Migrations
 
                     b.HasIndex("VorgehensmodellId");
 
-                    b.ToTable("Projektphasen");
+                    b.ToTable("Projektphasen", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Vorgehensmodell", b =>
@@ -361,7 +361,7 @@ namespace FocusFlow.Migrations
 
                     b.HasKey("VorgehensmodellId");
 
-                    b.ToTable("Vorgehensmodelle");
+                    b.ToTable("Vorgehensmodelle", (string)null);
                 });
 
             modelBuilder.Entity("FocusFlow.Models.Aktivitaet", b =>

@@ -48,8 +48,16 @@ namespace FocusFlow.Controllers
         // GET: ProjektVerwaltung/Create
         public IActionResult Create()
         {
-            ViewBag.VorlageVorgehensmodellId = new SelectList(_context.Vorgehensmodelle.Where(vm => vm.IstVorlage), "VorgehensmodellId", "Name");
-            ViewBag.ProjektleiterId = new SelectList(_context.Mitarbeiter.Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }), "MitarbeiterId", "Name");
+            // Dropdown für Projektleiter
+            ViewBag.ProjektleiterId = new SelectList(
+                _context.Mitarbeiter
+                    .Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }),
+                "MitarbeiterId", "Name");
+
+            // Dropdown für Vorgehensmodell-Vorlagen
+            ViewBag.VorlageVorgehensmodellId = new SelectList(
+                _context.Vorgehensmodelle.Where(vm => vm.IstVorlage),
+                "VorgehensmodellId", "Name");
             return View();
         }
 
@@ -59,42 +67,41 @@ namespace FocusFlow.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Vorgehensmodell-Vorlage mit allen Phasen aus der DB laden
-                var originalVorgehensmodell = await _context.Vorgehensmodelle
-                    .Include(vm => vm.Projektphasen) // Lade alle zugehörigen Projektphasen
+                // 1) Vorlage laden
+                var original = await _context.Vorgehensmodelle
+                    .Include(vm => vm.Projektphasen)
                     .FirstOrDefaultAsync(vm => vm.VorgehensmodellId == VorlageVorgehensmodellId);
 
-                if (originalVorgehensmodell == null)
+                if (original == null)
                 {
-                    ModelState.AddModelError("", "Das gewählte Vorgehensmodell existiert nicht.");
+                    // Falls nichts gefunden
+                    ModelState.AddModelError("", "Vorgehensmodell nicht gefunden.");
                     return View(projekt);
                 }
 
-                // Eine neue Kopie des Vorgehensmodells erstellen
-                var neuesVorgehensmodell = new Vorgehensmodell
+                // 2) Neue Kopie erstellen
+                var kopie = new Vorgehensmodell
                 {
-                    Name = originalVorgehensmodell.Name,
-                    IstVorlage = false, // Es soll KEINE Vorlage sein
+                    Name = original.Name + " (Kopie)",
+                    IstVorlage = false,
                     Projektphasen = new List<Projektphase>()
                 };
 
-                // Kopiere alle Projektphasen und verknüpfe sie mit dem neuen Vorgehensmodell
-                foreach (var phase in originalVorgehensmodell.Projektphasen)
+                // 3) Phasen kopieren
+                foreach (var phase in original.Projektphasen)
                 {
-                    var neuePhase = new Projektphase
+                    kopie.Projektphasen.Add(new Projektphase
                     {
                         ProjektphaseName = phase.ProjektphaseName,
-                        DauerInTagen = phase.DauerInTagen,
-                        Vorgehensmodell = neuesVorgehensmodell 
-                    };
-
-                    neuesVorgehensmodell.Projektphasen.Add(neuePhase);
+                        DauerInTagen = phase.DauerInTagen
+                        // etc.
+                    });
                 }
 
-                // Neues Vorgehensmodell dem Projekt zuweisen
-                projekt.Vorgehensmodell = neuesVorgehensmodell;
+                // 4) Kopie dem Projekt zuweisen
+                projekt.Vorgehensmodell = kopie;
 
-                // 5️⃣ Projekt speichern (inkl. Vorgehensmodell + Phasen)
+                // 5) Projekt an DB anhängen und speichern
                 _context.Add(projekt);
                 await _context.SaveChangesAsync();
 

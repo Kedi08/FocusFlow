@@ -27,6 +27,6 @@ namespace FocusFlow.Models
 
         [ForeignKey("Vorgehensmodell")]
         public int VorgehensmodellId { get; set; }
-        public Vorgehensmodell Vorgehensmodell { get; set; } = null!;
+        public Vorgehensmodell? Vorgehensmodell { get; set; }
     }
 }
