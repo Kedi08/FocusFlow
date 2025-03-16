@@ -36,11 +36,13 @@ namespace FocusFlow.Controllers
 
             var projekt = await _context.Projekte
                 .Include(p => p.Projektleiter)
+                .Include(d => d.Dokumente)
                 .FirstOrDefaultAsync(m => m.ProjektId == id);
             if (projekt == null)
             {
                 return NotFound();
             }
+
 
             return View(projekt);
         }

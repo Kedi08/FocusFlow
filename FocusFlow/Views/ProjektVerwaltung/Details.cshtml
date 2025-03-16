@@ -76,7 +76,19 @@
         <dd class = "col-sm-10">
             @(Model.Projektleiter.Vorname + " " + Model.Projektleiter.Nachname)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Dokumente)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Dokumente.Count().ToString())
+        </dd>
     </dl>
+    <a asp-controller="Dokumente"
+       asp-action="Create"
+       asp-route-parentId="@Model.ProjektId"
+       asp-route-parentType="Projekt">
+        Dokument hinzufügen
+    </a>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ProjektId">Edit</a> |
