@@ -87,45 +87,84 @@ namespace FocusFlow.Controllers
                 return NotFound();
             }
 
-            var vorgehensmodell = await _context.Vorgehensmodelle.FindAsync(id);
+            var vorgehensmodell = await _context.Vorgehensmodelle
+                .Include(vm => vm.Projektphasen)
+                .FirstOrDefaultAsync(vm => vm.VorgehensmodellId == id);
+
             if (vorgehensmodell == null)
             {
                 return NotFound();
             }
+            // Phasen nach Reihenfolge sortieren
+            vorgehensmodell.Projektphasen = vorgehensmodell.Projektphasen
+                .OrderBy(p => p.Reihenfolge)
+                .ToList();
             return View(vorgehensmodell);
         }
 
         // POST: VorgehensmodellVerwaltung/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Vorgehensmodell vorgehensmodell)
+        public async Task<IActionResult> Edit(Vorgehensmodell model)
         {
-            if (id != vorgehensmodell.VorgehensmodellId)
+            
+
+            var dbVorgehensmodell = await _context.Vorgehensmodelle
+                .Include(vm => vm.Projektphasen)
+                .FirstOrDefaultAsync(vm => vm.VorgehensmodellId == model.VorgehensmodellId);
+
+            if (dbVorgehensmodell == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            dbVorgehensmodell.Name = model.Name;
+            var aktuelleIds = model.Projektphasen
+                .Where(p => p.ProjektphaseId != 0)
+                .Select(p => p.ProjektphaseId)
+                .ToList();
+
+            //  Entferne Phasen, die im alten Objekt vorhanden sind, aber im neuen Model nicht mehr übergeben wurden
+            foreach (var phase in dbVorgehensmodell.Projektphasen
+                .Where(p => !aktuelleIds.Contains(p.ProjektphaseId))
+                .ToList())
             {
-                try
-                {
-                    _context.Update(vorgehensmodell);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VorgehensmodellExists(vorgehensmodell.VorgehensmodellId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                dbVorgehensmodell.Projektphasen.Remove(phase);
             }
-            return View(vorgehensmodell);
+
+            foreach (var phaseForm in model.Projektphasen)
+            {
+                if (phaseForm.ProjektphaseId != 0)
+                {
+                    var dbPhase = dbVorgehensmodell.Projektphasen
+                        .FirstOrDefault(p => p.ProjektphaseId == phaseForm.ProjektphaseId);
+                    if (dbPhase != null)
+                    {
+                        dbPhase.ProjektphaseName = phaseForm.ProjektphaseName;
+                        dbPhase.DauerInTagen = phaseForm.DauerInTagen;
+                        dbPhase.Reihenfolge = phaseForm.Reihenfolge;
+                    }
+                }
+                else
+                {
+                    // Neue Phase: Hinzufügen
+                    dbVorgehensmodell.Projektphasen.Add(new Projektphase
+                    {
+                        ProjektphaseName = phaseForm.ProjektphaseName,
+                        DauerInTagen = phaseForm.DauerInTagen,
+                        Reihenfolge = phaseForm.Reihenfolge
+                    });
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await _context.SaveChangesAsync();
+
+            // 5) Weiterleitung (z. B. zurück zur Übersicht)
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: VorgehensmodellVerwaltung/Delete/5

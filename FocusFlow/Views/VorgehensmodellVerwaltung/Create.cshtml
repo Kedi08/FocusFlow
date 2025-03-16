@@ -43,28 +43,6 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script>
-        let phaseCounter = 0;
-
-        function addPhase() {
-            let table = document.getElementById("phasenTable").getElementsByTagName('tbody')[0];
-            let row = table.insertRow();
-
-            let nameCell = row.insertCell(0);
-            let durationCell = row.insertCell(1);
-            let actionsCell = row.insertCell(2);
-
-            nameCell.innerHTML = `<input type="text" name="Projektphasen[${phaseCounter}].ProjektphaseName" class="form-control" required />`;
-            durationCell.innerHTML = `<input type="number" name="Projektphasen[${phaseCounter}].DauerInTagen" class="form-control" required />`;
-            actionsCell.innerHTML = `<button type="button" class="btn btn-danger btn-sm" onclick="removePhase(this)">Löschen</button>`;
-
-            phaseCounter++;
-        }
-
-        function removePhase(button) {
-            let row = button.parentNode.parentNode;
-            row.parentNode.removeChild(row);
-        }
-    </script>
+    @await Html.PartialAsync("_VorgehensmodellScripts")
+    
 }

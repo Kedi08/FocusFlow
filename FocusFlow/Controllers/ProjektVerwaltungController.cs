@@ -65,6 +65,17 @@ namespace FocusFlow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Projekt projekt, int VorlageId)
         {
+            if (projekt.StartdatumGeplant != null)
+            {
+                if(projekt.EnddatumGeplant != null)
+                {
+                    if(projekt.StartdatumGeplant>projekt.EnddatumGeplant)
+                    {
+                        ModelState.AddModelError("StartdatumGeplant", "Geplantes Startdatum ist nach geplantem Enddatum.");
+                        return View(projekt);
+                    }
+                }
+            }
             if (ModelState.IsValid)
             {
                 var original = await _context.Vorgehensmodelle
@@ -89,6 +100,7 @@ namespace FocusFlow.Controllers
                     kopie.Projektphasen.Add(new Projektphase
                     {
                         ProjektphaseName = phase.ProjektphaseName,
+                        Status = "NEU",
                         DauerInTagen = phase.DauerInTagen
                     });
                 }
@@ -116,7 +128,16 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId", projekt.ProjektleiterId);
+            // Dropdown für Projektleiter
+            ViewBag.ProjektleiterId = new SelectList(
+                _context.Mitarbeiter
+                    .Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }),
+                "MitarbeiterId", "Name");
+
+            // Dropdown für Vorgehensmodell-Vorlagen
+            ViewBag.VorlageVorgehensmodellId = new SelectList(
+                _context.Vorgehensmodelle.Where(vm => vm.IstVorlage),
+                "VorgehensmodellId", "Name");
             return View(projekt);
         }
 

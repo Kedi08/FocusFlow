@@ -23,7 +23,7 @@
                 <span asp-validation-for="Beschreibung" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Prioritaet" class="control-label"></label>
+                <label asp-for="Prioritaet" class="control-label">Priorität</label>
                 <input asp-for="Prioritaet" class="form-control" />
                 <span asp-validation-for="Prioritaet" class="text-danger"></span>
             </div>
@@ -33,15 +33,16 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartdatumGeplant" class="control-label"></label>
+                <label asp-for="StartdatumGeplant" class="control-label">Startdatum Geplant</label>
                 <input asp-for="StartdatumGeplant" class="form-control" />
+                <span asp-validation-for="StartdatumGeplant" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EnddatumGeplant" class="control-label"></label>
+                <label asp-for="EnddatumGeplant" class="control-label">Enddatum Geplant</label>
                 <input asp-for="EnddatumGeplant" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="ProjektleiterId" class="control-label"></label>
+                <label asp-for="ProjektleiterId" class="control-label">Projektleiter</label>
                 <select asp-for="ProjektleiterId" class="form-control" asp-items="ViewBag.ProjektleiterId">
                     <option value="">-- Bitte wählen --</option>
                 </select>
