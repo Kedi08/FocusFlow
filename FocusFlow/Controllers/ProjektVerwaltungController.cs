@@ -63,59 +63,43 @@ namespace FocusFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Projekt projekt, int VorlageVorgehensmodellId)
+        public async Task<IActionResult> Create(Projekt projekt, int VorlageId)
         {
             if (ModelState.IsValid)
             {
-                // 1) Vorlage laden
                 var original = await _context.Vorgehensmodelle
                     .Include(vm => vm.Projektphasen)
-                    .FirstOrDefaultAsync(vm => vm.VorgehensmodellId == VorlageVorgehensmodellId);
+                    .FirstOrDefaultAsync(vm => vm.VorgehensmodellId == VorlageId);
 
                 if (original == null)
                 {
-                    // Falls nichts gefunden
                     ModelState.AddModelError("", "Vorgehensmodell nicht gefunden.");
                     return View(projekt);
                 }
 
-                // 2) Neue Kopie erstellen
                 var kopie = new Vorgehensmodell
                 {
-                    Name = original.Name + " (Kopie)",
+                    Name = original.Name,
                     IstVorlage = false,
                     Projektphasen = new List<Projektphase>()
                 };
 
-                // 3) Phasen kopieren
                 foreach (var phase in original.Projektphasen)
                 {
                     kopie.Projektphasen.Add(new Projektphase
                     {
                         ProjektphaseName = phase.ProjektphaseName,
                         DauerInTagen = phase.DauerInTagen
-                        // etc.
                     });
                 }
 
-                // 4) Kopie dem Projekt zuweisen
                 projekt.Vorgehensmodell = kopie;
 
-                // 5) Projekt an DB anhängen und speichern
                 _context.Add(projekt);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-
-            // 6️⃣ Falls Fehler auftreten, DropDown-Menüs erneut befüllen
-            ViewData["VorlageVorgehensmodellId"] = new SelectList(
-                _context.Vorgehensmodelle.Where(vm => vm.IstVorlage), "VorgehensmodellId", "Name");
-
-            ViewData["ProjektleiterId"] = new SelectList(
-                _context.Mitarbeiter.Select(m => new { m.MitarbeiterId, Name = m.Vorname + " " + m.Nachname }),
-                "MitarbeiterId", "Name");
-
             return View(projekt);
         }
 
