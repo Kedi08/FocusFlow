@@ -160,13 +160,14 @@ namespace FocusFlow.Controllers
             ViewBag.VorlageVorgehensmodellId = new SelectList(
                 _context.Vorgehensmodelle.Where(vm => vm.IstVorlage),
                 "VorgehensmodellId", "Name");
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(projekt);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Projekt projekt)
+        public async Task<IActionResult> Edit(int id, Projekt projekt, string returnUrl)
         {
             if (id != projekt.ProjektId)
             {
@@ -191,7 +192,14 @@ namespace FocusFlow.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             ViewData["ProjektleiterId"] = new SelectList(_context.Mitarbeiter, "MitarbeiterId", "MitarbeiterId", projekt.ProjektleiterId);
             return View(projekt);
