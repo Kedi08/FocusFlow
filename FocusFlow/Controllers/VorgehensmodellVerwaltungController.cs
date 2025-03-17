@@ -28,24 +28,6 @@ namespace FocusFlow.Controllers
                           Problem("Entity set 'AppDbContext.Vorgehensmodelle'  is null.");
         }
 
-        // GET: VorgehensmodellVerwaltung/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Vorgehensmodelle == null)
-            {
-                return NotFound();
-            }
-
-            var vorgehensmodell = await _context.Vorgehensmodelle
-                .FirstOrDefaultAsync(m => m.VorgehensmodellId == id);
-            if (vorgehensmodell == null)
-            {
-                return NotFound();
-            }
-
-            return View(vorgehensmodell);
-        }
-
         // GET: VorgehensmodellVerwaltung/Create
         public IActionResult Create()
         {

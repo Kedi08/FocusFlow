@@ -35,5 +35,6 @@
         <input type="hidden" asp-for="DokumentId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
+        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
     </form>
 </div>

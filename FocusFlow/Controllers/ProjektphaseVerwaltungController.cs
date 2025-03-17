@@ -27,24 +27,6 @@ namespace FocusFlow.Controllers
                           Problem("Entity set 'AppDbContext.Projektphasen'  is null.");
         }
 
-        // GET: ProjektphaseVerwaltung/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Projektphasen == null)
-            {
-                return NotFound();
-            }
-
-            var projektphase = await _context.Projektphasen
-                .FirstOrDefaultAsync(m => m.ProjektphaseId == id);
-            if (projektphase == null)
-            {
-                return NotFound();
-            }
-
-            return View(projektphase);
-        }
-
         // GET: ProjektphaseVerwaltung/Create
         public IActionResult Create()
         {

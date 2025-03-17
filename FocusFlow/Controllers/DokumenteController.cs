@@ -19,31 +19,6 @@ namespace FocusFlow.Controllers
         {
             _context = context;
         }
-
-        // GET: Dokumente
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Dokumente.ToListAsync());
-        }
-
-        // GET: Dokumente/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var dokument = await _context.Dokumente
-                .FirstOrDefaultAsync(m => m.DokumentId == id);
-            if (dokument == null)
-            {
-                return NotFound();
-            }
-
-            return View(dokument);
-        }
-
         // GET: Dokumente/Create
         public IActionResult Create(int parentId, string parentType)
         {
@@ -136,13 +111,14 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(dokument);
         }
 
         // POST: Dokumente/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Dokument dokument)
+        public async Task<IActionResult> Edit(int id, Dokument dokument, string returnUrl)
         {
             if (id != dokument.DokumentId)
             {
@@ -167,9 +143,16 @@ namespace FocusFlow.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
-            return View(dokument);
+            return RedirectToAction("Index");
         }
 
         // GET: Dokumente/Delete/5
@@ -186,14 +169,14 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(dokument);
         }
 
         // POST: Dokumente/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl)
         {
             var dokument = await _context.Dokumente.FindAsync(id);
             if (dokument != null)
@@ -202,7 +185,14 @@ namespace FocusFlow.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         private bool DokumentExists(int id)

@@ -96,6 +96,7 @@ namespace FocusFlow.Controllers
                     }
                 }
             }
+            projekt.Fortschritt = 0;
             if (ModelState.IsValid)
             {
                 var original = await _context.Vorgehensmodelle
@@ -121,6 +122,7 @@ namespace FocusFlow.Controllers
                     {
                         ProjektphaseName = phase.ProjektphaseName,
                         Status = "NEU",
+                        Fortschritt = 0,
                         DauerInTagen = phase.DauerInTagen
                     });
                 }

@@ -7,13 +7,13 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>@Model.Titel</h2>
-        <a href="@Url.Action("Edit", "ProjektVerwaltung", new { id = Model.ProjektId })" class="btn btn-primary">Projekt bearbeiten</a>
     </div>
 
     <!-- Allgemeine Projektinformationen -->
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             Allgemeine Informationen
+            <a href="@Url.Action("Edit", "ProjektVerwaltung", new { id = Model.ProjektId })" class="btn btn-primary">Projekt bearbeiten</a>
         </div>
         <div class="card-body">
             <p><strong>Beschreibung:</strong> @Model.Beschreibung</p>
@@ -47,7 +47,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Projektdokumente</span>
-            <a href="@Url.Action("Create", "Dokumente", new { projektId = Model.ProjektId })" class="btn btn-success btn-sm">Dokument hinzufügen</a>
+            <a href="@Url.Action("Create", "Dokumente", new { parentId = Model.ProjektId, parentType = "Projekt" })" class="btn btn-success btn-sm">Dokument hinzufügen</a>
         </div>
         <div class="card-body">
             @if (Model.Dokumente != null && Model.Dokumente.Any())
@@ -78,10 +78,8 @@
                 <a href="@Url.Action("Edit", "VorgehensmodellVerwaltung", new { id = Model.Vorgehensmodell.VorgehensmodellId })" class="btn btn-primary btn-sm">Bearbeiten</a>
             </div>
             <div class="card-body">
-                <p><strong>Ist Vorlage:</strong> @(Model.Vorgehensmodell.IstVorlage ? "Ja" : "Nein")</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <h5>Projektphasen</h5>
-                    <a href="@Url.Action("Create", "ProjektphaseVerwaltung", new { vorgehensmodellId = Model.Vorgehensmodell.VorgehensmodellId })" class="btn btn-success btn-sm">Neue Phase hinzufügen</a>
                 </div>
                 @if (Model.Vorgehensmodell.Projektphasen != null && Model.Vorgehensmodell.Projektphasen.Any())
                 {
@@ -108,7 +106,7 @@
                                 <!-- Dokumente der Projektphase -->
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6>Dokumente</h6>
-                                    <a href="@Url.Action("Create", "Dokumente", new { phaseId = phase.ProjektphaseId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                    <a href="@Url.Action("Create", "Dokumente", new { parentId = phase.ProjektphaseId, parentType = "Projektphase"})" class="btn btn-success btn-sm">Hinzufügen</a>
                                 </div>
                                 @if (phase.Dokumente != null && phase.Dokumente.Any())
                                 {
@@ -225,7 +223,7 @@
                                                 <!-- Dokumente der Aktivität -->
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <h6>Dokumente</h6>
-                                                    <a href="@Url.Action("Create", "Dokumente", new { aktivitaetId = activity.AktivitaetId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                                    <a href="@Url.Action("Create", "Dokumente", new { parentId = activity.AktivitaetId, parentType ="Aktivitaet" })" class="btn btn-success btn-sm">Hinzufügen</a>
                                                 </div>
                                                 @if (activity.Dokumente != null && activity.Dokumente.Any())
                                                 {

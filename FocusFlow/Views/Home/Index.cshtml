@@ -1,7 +1,25 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="display-4">Projektverwaltung leicht gemacht</h1>
+            <p class="lead">
+                Unsere Anwendung bietet eine intuitive und effiziente Möglichkeit, Projekte zu verwalten.
+                Behalte den Überblick über Fortschritt, Ressourcen und Kosten, während dein Team nahtlos
+                Dokumente verknüpfen und verwalten kann.
+            </p>
+            <a href="@Url.Action("Index", "ProjektVerwaltung")" class="btn btn-primary btn-lg mt-3">
+                Jetzt starten
+            </a>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-10 mx-auto">
+            <img src="https://www.vdi-wissensforum.de/fileadmin/_processed_/2/b/csm_08DP021_agiles-und-klassisches-IT-Projektmanagement_4ffdf1578e.webp"
+                 alt="Projektmanagement" class="img-fluid rounded shadow">
+        </div>
+    </div>
 </div>
