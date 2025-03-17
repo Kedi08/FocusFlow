@@ -18,10 +18,14 @@ namespace FocusFlow.Models
         public float? KostenEffektiv { get; set; }
         public float? Fortschritt { get; set; }
 
+        [ForeignKey("Projektphase")]
+        public int ProjektphaseId { get; set; }
+        public virtual Projektphase? Projektphase { get; set; }
+
         // Verantwortlicher Mitarbeiter
         [ForeignKey("Mitarbeiter")]
         public int MitarbeiterId { get; set; }
-        public virtual Mitarbeiter Mitarbeiter { get; set; } = null!;
+        public virtual Mitarbeiter? Mitarbeiter { get; set; }
 
         public ICollection<PersonelleRessource>? Ressourcen { get; set; }
         public ICollection<ExterneKosten>? ExterneKosten { get; set; }

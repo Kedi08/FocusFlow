@@ -150,7 +150,7 @@
                                 <!-- Aktivitäten der Projektphase -->
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6>Aktivitäten</h6>
-                                    <a href="@Url.Action("Create", "AktivitaetenVerwaltung", new { phaseId = phase.ProjektphaseId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                    <a href="@Url.Action("Create", "Aktivitaeten", new { phaseId = phase.ProjektphaseId })" class="btn btn-success btn-sm">Hinzufügen</a>
                                 </div>
                                 @if (phase.Aktivitaeten != null && phase.Aktivitaeten.Any())
                                 {
@@ -159,7 +159,7 @@
                                         <div class="card mb-2">
                                             <div class="card-header d-flex justify-content-between align-items-center">
                                                 <strong>@activity.Name</strong>
-                                                <a href="@Url.Action("Edit", "AktivitaetenVerwaltung", new { id = activity.AktivitaetId })" class="btn btn-primary btn-sm">Bearbeiten</a>
+                                                <a href="@Url.Action("Edit", "Aktivitaeten", new { id = activity.AktivitaetId })" class="btn btn-primary btn-sm">Bearbeiten</a>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row mb-2">
