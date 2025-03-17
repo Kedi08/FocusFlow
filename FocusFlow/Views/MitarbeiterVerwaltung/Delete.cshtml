@@ -1,51 +1,36 @@
 ﻿@model FocusFlow.Models.Mitarbeiter
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Mitarbeiter löschen";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">Mitarbeiter löschen</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Bist du sicher, dass du diesen Mitarbeiter löschen möchtest?</p>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Mitarbeiter</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Personalnummer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Personalnummer)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nachname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nachname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Vorname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vorname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Abteilung)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Abteilung)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Arbeitspensum)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Arbeitspensum)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MitarbeiterId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><strong>Personalnummer:</strong> @Model.Personalnummer</li>
+                        <li class="list-group-item"><strong>Name:</strong> @Model.Vorname @Model.Nachname</li>
+                        <li class="list-group-item"><strong>Abteilung:</strong> @Model.Abteilung</li>
+                        <li class="list-group-item"><strong>Arbeitspensum:</strong> @Model.Arbeitspensum%</li>
+                    </ul>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="MitarbeiterId" />
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Abbrechen</a>
+                            <button type="submit" class="btn btn-danger">Löschen</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

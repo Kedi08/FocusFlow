@@ -33,6 +33,7 @@ namespace FocusFlow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Dokument dokument, int parentId, string parentType, string returnUrl)
         {
+            dokument.Pfad = "Not implemented";
             if (!ModelState.IsValid)
             {
                 return View(dokument);
@@ -120,6 +121,7 @@ namespace FocusFlow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Dokument dokument, string returnUrl)
         {
+            dokument.Pfad = "Not implemented";
             if (id != dokument.DokumentId)
             {
                 return NotFound();

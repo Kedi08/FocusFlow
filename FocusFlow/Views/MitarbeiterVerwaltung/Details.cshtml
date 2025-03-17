@@ -1,54 +1,34 @@
 ﻿@model FocusFlow.Models.Mitarbeiter
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Mitarbeiterdetails";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Mitarbeiterdetails</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><strong>Personalnummer:</strong> @Model.Personalnummer</li>
+                        <li class="list-group-item"><strong>Name:</strong> @Model.Vorname @Model.Nachname</li>
+                        <li class="list-group-item"><strong>Abteilung:</strong> @Model.Abteilung</li>
+                        <li class="list-group-item"><strong>Arbeitspensum:</strong> @Model.Arbeitspensum%</li>
+                        @if (!string.IsNullOrEmpty(Model.Funktionen))
+                        {
+                            <li class="list-group-item"><strong>Funktionen:</strong> @Model.Funktionen</li>
+                        }
+                    </ul>
 
-<div>
-    <h4>Mitarbeiter</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Personalnummer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Personalnummer)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nachname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nachname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Vorname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vorname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Abteilung)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Abteilung)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Arbeitspensum)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Arbeitspensum)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Funktionen)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Funktionen)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MitarbeiterId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Zurück zur Liste</a>
+                        <a asp-action="Edit" asp-route-id="@Model?.MitarbeiterId" class="btn btn-primary">Bearbeiten</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

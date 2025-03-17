@@ -2,82 +2,84 @@
 
 @{
     ViewData["Title"] = "Vorgehensmodell bearbeiten";
-}
-@{
     var phasesList = Model.Projektphasen.OrderBy(p => p.Reihenfolge).ToList();
 }
 
-<h1>Vorgehensmodell bearbeiten</h1>
-<hr />
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Vorgehensmodell bearbeiten</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-<form asp-action="Edit" method="post">
-    <!-- Wichtig: POST-Method -->
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="VorgehensmodellId" />
 
-    <input type="hidden" asp-for="VorgehensmodellId" /> <!-- ID mitgeben, falls wir sie brauchen -->
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Vorgehensmodell-Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Name des Vorgehensmodells eingeben" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
 
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+                        <h4 class="mt-4">Projektphasen</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="phasenTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Dauer (Tage)</th>
+                                        <th>Aktionen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var i = 0; i < phasesList.Count; i++)
+                                    {
+                                        <tr>
+                                            <input type="hidden" name="Projektphasen[@i].ProjektphaseId" value="@phasesList[i].ProjektphaseId" />
+
+                                            <td>
+                                                <input type="text" name="Projektphasen[@i].ProjektphaseName" value="@phasesList[i].ProjektphaseName"
+                                                       class="form-control" placeholder="Phasenname eingeben" />
+                                                <input type="hidden" name="Projektphasen[@i].Reihenfolge" value="@phasesList[i].Reihenfolge" />
+                                            </td>
+                                            <td>
+                                                <input type="number" name="Projektphasen[@i].DauerInTagen" value="@phasesList[i].DauerInTagen"
+                                                       class="form-control" min="1" placeholder="Dauer (Tage)" />
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="movePhaseUp(this)">▲</button>
+                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="movePhaseDown(this)">▼</button>
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="removePhase(this)">🗑</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button type="button" class="btn btn-secondary mt-2" onclick="addPhase()">+ Phase hinzufügen</button>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Abbrechen</a>
+                            <button type="submit" class="btn btn-primary">Speichern</button>
+                        </div>
+
+                        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <h4>Projektphasen</h4>
-    <table class="table" id="phasenTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Dauer (Tage)</th>
-                <th>Aktionen</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (var i = 0; i < phasesList.Count; i++)
-            {
-                <tr>
-                    <input type="hidden"
-                           name="Projektphasen[@i].ProjektphaseId"
-                           value="@phasesList[i].ProjektphaseId" />
-
-                    <td>
-                        <input type="text"
-                               name="Projektphasen[@i].ProjektphaseName"
-                               value="@phasesList[i].ProjektphaseName"
-                               class="form-control" />
-                        <input type="hidden"
-                               name="Projektphasen[@i].Reihenfolge"
-                               value="@phasesList[i].Reihenfolge" />
-                    </td>
-                    <td>
-                        <input type="number"
-                               name="Projektphasen[@i].DauerInTagen"
-                               value="@phasesList[i].DauerInTagen"
-                               class="form-control" />
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="movePhaseUp(this)">▲</button>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="movePhaseDown(this)">▼</button>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="removePhase(this)">Löschen</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <button type="button" class="btn btn-secondary" onclick="addPhase()">Phase hinzufügen</button>
-
-    <div class="form-group mt-3">
-        <input type="submit" value="Speichern" class="btn btn-primary" />
-    </div>
-    <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
-</form>
-
-<div>
-    <a asp-action="Index">Zurück zur Liste</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     @await Html.PartialAsync("_VorgehensmodellScripts")
-    
 }

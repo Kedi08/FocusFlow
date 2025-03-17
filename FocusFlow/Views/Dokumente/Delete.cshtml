@@ -1,40 +1,41 @@
 ﻿@model FocusFlow.Models.Dokument
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Dokument löschen";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">⚠ Dokument löschen</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead text-danger">Bist du sicher, dass du dieses Dokument unwiderruflich löschen möchtest?</p>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Dokument</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Typ)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Typ)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Pfad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pfad)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="DokumentId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a href="@ViewData["ReturnUrl"]">Back</a>
-        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
-    </form>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><strong>Name:</strong> @Model.Name</li>
+                        <li class="list-group-item"><strong>Typ:</strong> @Model.Typ</li>
+                        @if (!string.IsNullOrEmpty(Model.Pfad))
+                        {
+                            <li class="list-group-item">
+                                <strong>Dokument:</strong> <a href="@Model.Pfad" target="_blank">📂 Datei öffnen</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="DokumentId" />
+                        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@ViewData["ReturnUrl"]" class="btn btn-outline-secondary">Abbrechen</a>
+                            <button type="submit" class="btn btn-danger">🗑 Löschen</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

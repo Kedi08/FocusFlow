@@ -1,53 +1,44 @@
 ﻿@model IEnumerable<FocusFlow.Models.Mitarbeiter>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Mitarbeiterübersicht";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Mitarbeiterübersicht</h2>
+        <a asp-action="Create" class="btn btn-primary">+ Neuer Mitarbeiter</a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nachname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vorname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Abteilung)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Arbeitspensum)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nachname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vorname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abteilung)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Arbeitspensum)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MitarbeiterId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MitarbeiterId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MitarbeiterId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.First().Nachname)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Vorname)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Abteilung)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Arbeitspensum)</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nachname)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Vorname)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Abteilung)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Arbeitspensum)%</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Edit" asp-route-id="@item.MitarbeiterId" class="btn btn-warning btn-sm">✏ Bearbeiten</a>
+                                <a asp-action="Details" asp-route-id="@item.MitarbeiterId" class="btn btn-info btn-sm">ℹ Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.MitarbeiterId" class="btn btn-danger btn-sm">🗑 Löschen</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

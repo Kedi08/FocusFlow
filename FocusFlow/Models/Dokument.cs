@@ -10,7 +10,7 @@ namespace FocusFlow.Models
 
         public string Name { get; set; } = null!;
         public string Typ { get; set; } = null!;
-        public string Pfad { get; set; } = null!;
+        public string? Pfad { get; set; }
 
     }
 }

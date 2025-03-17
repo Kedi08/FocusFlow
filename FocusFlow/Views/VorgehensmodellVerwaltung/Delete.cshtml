@@ -1,28 +1,34 @@
 ﻿@model FocusFlow.Models.Vorgehensmodell
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Vorgehensmodell löschen";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">⚠ Vorgehensmodell löschen</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead text-danger">Bist du sicher, dass du dieses Vorgehensmodell unwiderruflich löschen möchtest?</p>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Vorgehensmodell</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="VorgehensmodellId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
-    </form>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><strong>Name:</strong> @Model.Name</li>
+                    </ul>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="VorgehensmodellId" />
+                        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@ViewData["ReturnUrl"]" class="btn btn-outline-secondary">Abbrechen</a>
+                            <button type="submit" class="btn btn-danger">🗑 Löschen</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
