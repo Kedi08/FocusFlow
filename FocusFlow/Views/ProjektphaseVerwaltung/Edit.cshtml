@@ -76,6 +76,8 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+            <input type="hidden" asp-for="VorgehensmodellId" />
+            <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
         </form>
     </div>
 </div>

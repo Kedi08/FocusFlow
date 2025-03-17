@@ -31,13 +31,14 @@ namespace FocusFlow.Controllers
         // GET: VorgehensmodellVerwaltung/Create
         public IActionResult Create()
         {
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View();
         }
 
         // POST: VorgehensmodellVerwaltung/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Vorgehensmodell vorgehensmodell, List<Projektphase> projektphasen)
+        public async Task<IActionResult> Create(Vorgehensmodell vorgehensmodell, List<Projektphase> projektphasen, string returnUrl)
         {
             vorgehensmodell.IstVorlage = true;
 
@@ -55,7 +56,14 @@ namespace FocusFlow.Controllers
             {
                 _context.Add(vorgehensmodell);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
 
             return View(vorgehensmodell);
@@ -81,13 +89,14 @@ namespace FocusFlow.Controllers
             vorgehensmodell.Projektphasen = vorgehensmodell.Projektphasen
                 .OrderBy(p => p.Reihenfolge)
                 .ToList();
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(vorgehensmodell);
         }
 
         // POST: VorgehensmodellVerwaltung/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Vorgehensmodell model)
+        public async Task<IActionResult> Edit(Vorgehensmodell model, string returnUrl)
         {
             
 
@@ -145,8 +154,14 @@ namespace FocusFlow.Controllers
 
             await _context.SaveChangesAsync();
 
-            // 5) Weiterleitung (z. B. zurück zur Übersicht)
-            return RedirectToAction(nameof(Index));
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: VorgehensmodellVerwaltung/Delete/5
@@ -163,14 +178,14 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(vorgehensmodell);
         }
 
         // POST: VorgehensmodellVerwaltung/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl)
         {
             if (_context.Vorgehensmodelle == null)
             {
@@ -183,7 +198,14 @@ namespace FocusFlow.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         private bool VorgehensmodellExists(int id)

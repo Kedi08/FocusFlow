@@ -30,13 +30,14 @@ namespace FocusFlow.Controllers
         // GET: ProjektphaseVerwaltung/Create
         public IActionResult Create()
         {
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View();
         }
 
         // POST: ProjektphaseVerwaltung/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Projektphase projektphase)
+        public async Task<IActionResult> Create(Projektphase projektphase, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +45,14 @@ namespace FocusFlow.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(projektphase);
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: ProjektphaseVerwaltung/Edit/5
@@ -60,13 +68,14 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(projektphase);
         }
 
         // POST: ProjektphaseVerwaltung/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,   Projektphase projektphase)
+        public async Task<IActionResult> Edit(int id,   Projektphase projektphase, string returnUrl)
         {
             if (id != projektphase.ProjektphaseId)
             {
@@ -91,7 +100,14 @@ namespace FocusFlow.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             return View(projektphase);
         }
@@ -110,14 +126,14 @@ namespace FocusFlow.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["ReturnUrl"] = Request.Headers["Referer"].ToString();
             return View(projektphase);
         }
 
         // POST: ProjektphaseVerwaltung/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl)
         {
             if (_context.Projektphasen == null)
             {
@@ -130,7 +146,14 @@ namespace FocusFlow.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         private bool ProjektphaseExists(int id)
