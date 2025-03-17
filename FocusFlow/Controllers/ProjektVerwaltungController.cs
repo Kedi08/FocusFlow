@@ -36,8 +36,26 @@ namespace FocusFlow.Controllers
 
             var projekt = await _context.Projekte
                 .Include(p => p.Projektleiter)
-                .Include(d => d.Dokumente)
-                .FirstOrDefaultAsync(m => m.ProjektId == id);
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Dokumente)
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Meilensteine)
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Aktivitaeten)
+                            .ThenInclude(a => a.Ressourcen)
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Aktivitaeten)
+                            .ThenInclude(a => a.ExterneKosten)
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Aktivitaeten)
+                            .ThenInclude(a => a.Dokumente)
+                .Include(p => p.Dokumente)
+                .FirstOrDefaultAsync(p => p.ProjektId == id);
             if (projekt == null)
             {
                 return NotFound();

@@ -1,96 +1,266 @@
 ﻿@model FocusFlow.Models.Projekt
 
 @{
-    ViewData["Title"] = "Details";
+    ViewBag.Title = "Projektübersicht";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@Model.Titel</h2>
+        <a href="@Url.Action("Edit", "ProjektVerwaltung", new { id = Model.ProjektId })" class="btn btn-primary">Projekt bearbeiten</a>
+    </div>
 
-<div>
-    <h4>Projekt</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Beschreibung)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Beschreibung)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Bewilligungsdatum)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Bewilligungsdatum)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Prioritaet)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Prioritaet)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartdatumGeplant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartdatumGeplant)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EnddatumGeplant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EnddatumGeplant)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartdatumEffektiv)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartdatumEffektiv)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EnddatumEffektiv)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EnddatumEffektiv)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fortschritt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fortschritt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Projektleiter)
-        </dt>
-        <dd class = "col-sm-10">
-            @(Model.Projektleiter.Vorname + " " + Model.Projektleiter.Nachname)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Dokumente)
-        </dt>
-        <dd class="col-sm-10">
-            @(Model.Dokumente.Count().ToString())
-        </dd>
-    </dl>
-    <a asp-controller="Dokumente"
-       asp-action="Create"
-       asp-route-parentId="@Model.ProjektId"
-       asp-route-parentType="Projekt">
-        Dokument hinzufügen
-    </a>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProjektId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!-- Allgemeine Projektinformationen -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Allgemeine Informationen
+        </div>
+        <div class="card-body">
+            <p><strong>Beschreibung:</strong> @Model.Beschreibung</p>
+            @if (Model.Projektleiter != null)
+            {
+                <p><strong>Projektleiter:</strong> @Model.Projektleiter.Vorname @Model.Projektleiter.Nachname</p>
+            }
+            else
+            {
+                <p>Kein Projektleiter zugeordnet</p>
+                <a href="@Url.Action("Create", "MitarbeiterVerwaltung", new { projektId = Model.ProjektId })" class="btn btn-secondary btn-sm">Projektleiter hinzufügen</a>
+            }
+            <p><strong>Bewilligungsdatum:</strong> @(Model.Bewilligungsdatum.HasValue ? Model.Bewilligungsdatum.Value.ToShortDateString() : "N/A")</p>
+            <p><strong>Priorität:</strong> @Model.Prioritaet</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Geplanter Start:</strong> @(Model.StartdatumGeplant.HasValue ? Model.StartdatumGeplant.Value.ToShortDateString() : "N/A")</p>
+                    <p><strong>Geplantes Ende:</strong> @(Model.EnddatumGeplant.HasValue ? Model.EnddatumGeplant.Value.ToShortDateString() : "N/A")</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Effektiver Start:</strong> @(Model.StartdatumEffektiv.HasValue ? Model.StartdatumEffektiv.Value.ToShortDateString() : "N/A")</p>
+                    <p><strong>Effektives Ende:</strong> @(Model.EnddatumEffektiv.HasValue ? Model.EnddatumEffektiv.Value.ToShortDateString() : "N/A")</p>
+                    <p><strong>Fortschritt:</strong> @Model.Fortschritt %</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projektdokumente (direkt dem Projekt zugeordnet) -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Projektdokumente</span>
+            <a href="@Url.Action("Create", "Dokumente", new { projektId = Model.ProjektId })" class="btn btn-success btn-sm">Dokument hinzufügen</a>
+        </div>
+        <div class="card-body">
+            @if (Model.Dokumente != null && Model.Dokumente.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var doc in Model.Dokumente)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>@doc.Name</strong> (@doc.Typ)</span>
+                            <a href="@Url.Action("Edit", "Dokumente", new { id = doc.DokumentId })" class="btn btn-secondary btn-sm">Bearbeiten</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Keine Projektdokumente vorhanden.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Vorgehensmodell und Projektphasen -->
+    @if (Model.Vorgehensmodell != null)
+    {
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Vorgehensmodell: @Model.Vorgehensmodell.Name</h4>
+                <a href="@Url.Action("Edit", "VorgehensmodellVerwaltung", new { id = Model.Vorgehensmodell.VorgehensmodellId })" class="btn btn-primary btn-sm">Bearbeiten</a>
+            </div>
+            <div class="card-body">
+                <p><strong>Ist Vorlage:</strong> @(Model.Vorgehensmodell.IstVorlage ? "Ja" : "Nein")</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5>Projektphasen</h5>
+                    <a href="@Url.Action("Create", "ProjektphaseVerwaltung", new { vorgehensmodellId = Model.Vorgehensmodell.VorgehensmodellId })" class="btn btn-success btn-sm">Neue Phase hinzufügen</a>
+                </div>
+                @if (Model.Vorgehensmodell.Projektphasen != null && Model.Vorgehensmodell.Projektphasen.Any())
+                {
+                    @foreach (var phase in Model.Vorgehensmodell.Projektphasen)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <strong>@phase.ProjektphaseName</strong>
+                                <a href="@Url.Action("Edit", "ProjektphaseVerwaltung", new { id = phase.ProjektphaseId })" class="btn btn-primary btn-sm">Bearbeiten</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><strong>Dauer:</strong> @phase.DauerInTagen Tage</p>
+                                        <p><strong>Geplanter Start:</strong> @(phase.StartdatumGeplant.HasValue ? phase.StartdatumGeplant.Value.ToShortDateString() : "N/A")</p>
+                                        <p><strong>Geplantes Ende:</strong> @(phase.EnddatumGeplant.HasValue ? phase.EnddatumGeplant.Value.ToShortDateString() : "N/A")</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Status:</strong> @phase.Status</p>
+                                        <p><strong>Fortschritt:</strong> @phase.Fortschritt %</p>
+                                    </div>
+                                </div>
+
+                                <!-- Dokumente der Projektphase -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6>Dokumente</h6>
+                                    <a href="@Url.Action("Create", "Dokumente", new { phaseId = phase.ProjektphaseId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                </div>
+                                @if (phase.Dokumente != null && phase.Dokumente.Any())
+                                {
+                                    <ul class="list-group mb-2">
+                                        @foreach (var doc in phase.Dokumente)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span><strong>@doc.Name</strong> (@doc.Typ)</span>
+                                                <a href="@Url.Action("Edit", "Dokumente", new { id = doc.DokumentId })" class="btn btn-secondary btn-sm">Bearbeiten</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p class="mb-2">Keine Dokumente vorhanden.</p>
+                                }
+
+                                <!-- Meilensteine der Projektphase -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6>Meilensteine</h6>
+                                    <a href="@Url.Action("Create", "MeilensteinVerwaltung", new { phaseId = phase.ProjektphaseId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                </div>
+                                @if (phase.Meilensteine != null && phase.Meilensteine.Any())
+                                {
+                                    <ul class="list-group mb-2">
+                                        @foreach (var milestone in phase.Meilensteine)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span><strong>@milestone.Name</strong> – Datum: @(milestone.Datum.HasValue ? milestone.Datum.Value.ToShortDateString() : "N/A")</span>
+                                                <a href="@Url.Action("Edit", "MeilensteinVerwaltung", new { id = milestone.MeilensteinId })" class="btn btn-secondary btn-sm">Bearbeiten</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p class="mb-2">Keine Meilensteine vorhanden.</p>
+                                }
+
+                                <!-- Aktivitäten der Projektphase -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6>Aktivitäten</h6>
+                                    <a href="@Url.Action("Create", "AktivitaetenVerwaltung", new { phaseId = phase.ProjektphaseId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                </div>
+                                @if (phase.Aktivitaeten != null && phase.Aktivitaeten.Any())
+                                {
+                                    @foreach (var activity in phase.Aktivitaeten)
+                                    {
+                                        <div class="card mb-2">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <strong>@activity.Name</strong>
+                                                <a href="@Url.Action("Edit", "AktivitaetenVerwaltung", new { id = activity.AktivitaetId })" class="btn btn-primary btn-sm">Bearbeiten</a>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6">
+                                                        <p><strong>Geplanter Start:</strong> @(activity.StartdatumGeplant.HasValue ? activity.StartdatumGeplant.Value.ToShortDateString() : "N/A")</p>
+                                                        <p><strong>Geplantes Ende:</strong> @(activity.EnddatumGeplant.HasValue ? activity.EnddatumGeplant.Value.ToShortDateString() : "N/A")</p>
+                                                        <p><strong>Budget:</strong> @activity.Budget</p>
+                                                        <p><strong>Fortschritt:</strong> @activity.Fortschritt %</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong>Effektiver Start:</strong> @(activity.StartdatumEffektiv.HasValue ? activity.StartdatumEffektiv.Value.ToShortDateString() : "N/A")</p>
+                                                        <p><strong>Effektives Ende:</strong> @(activity.EnddatumEffektiv.HasValue ? activity.EnddatumEffektiv.Value.ToShortDateString() : "N/A")</p>
+                                                        <p><strong>Kosten Effektiv:</strong> @activity.KostenEffektiv</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Ressourcen der Aktivität -->
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6>Ressourcen</h6>
+                                                    <a href="@Url.Action("Create", "PersonelleRessource", new { aktivitaetId = activity.AktivitaetId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                                </div>
+                                                @if (activity.Ressourcen != null && activity.Ressourcen.Any())
+                                                {
+                                                    <ul class="list-group mb-2">
+                                                        @foreach (var res in activity.Ressourcen)
+                                                        {
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span><strong>@res.Funktion</strong> – Zeitbudget: @res.ZeitBudget, Zeit (effektiv): @res.ZeitEffektiv</span>
+                                                                <a href="@Url.Action("Edit", "PersonelleRessource", new { id = res.PersonelleRessourceId })" class="btn btn-secondary btn-sm">Bearbeiten</a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <p class="mb-2">Keine Ressourcen vorhanden.</p>
+                                                }
+
+                                                <!-- Externe Kosten der Aktivität -->
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6>Externe Kosten</h6>
+                                                    <a href="@Url.Action("Create", "ExterneKosten", new { aktivitaetId = activity.AktivitaetId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                                </div>
+                                                @if (activity.ExterneKosten != null && activity.ExterneKosten.Any())
+                                                {
+                                                    <ul class="list-group mb-2">
+                                                        @foreach (var ek in activity.ExterneKosten)
+                                                        {
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span><strong>@ek.Kostenart</strong> – Budget: @ek.Budget, Kosten effektiv: @ek.KostenEffektiv</span>
+                                                                <a href="@Url.Action("Edit", "ExterneKosten", new { id = ek.ExterneKostenId })" class="btn btn-secondary btn-sm">Bearbeiten</a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <p class="mb-2">Keine externen Kosten vorhanden.</p>
+                                                }
+
+                                                <!-- Dokumente der Aktivität -->
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6>Dokumente</h6>
+                                                    <a href="@Url.Action("Create", "Dokumente", new { aktivitaetId = activity.AktivitaetId })" class="btn btn-success btn-sm">Hinzufügen</a>
+                                                </div>
+                                                @if (activity.Dokumente != null && activity.Dokumente.Any())
+                                                {
+                                                    <ul class="list-group">
+                                                        @foreach (var adoc in activity.Dokumente)
+                                                        {
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span><strong>@adoc.Name</strong> (@adoc.Typ)</span>
+                                                                <a href="@Url.Action("Edit", "Dokumente", new { id = adoc.DokumentId })" class="btn btn-secondary btn-sm">Bearbeiten</a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <p class="mb-2">Keine Dokumente vorhanden.</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>Keine Aktivitäten vorhanden.</p>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Keine Projektphasen hinterlegt.</p>
+                    <a href="@Url.Action("Create", "ProjektphaseVerwaltung", new { vorgehensmodellId = Model.Vorgehensmodell.VorgehensmodellId })" class="btn btn-success btn-sm">Neue Phase hinzufügen</a>
+                }
+            </div>
+        </div>
+    }
 </div>
