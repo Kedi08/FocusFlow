@@ -229,17 +229,52 @@ namespace FocusFlow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Projekte == null)
-            {
-                return Problem("Entity set 'AppDbContext.Projekte'  is null.");
-            }
-            var projekt = await _context.Projekte.FindAsync(id);
+            // Lade das Projekt inklusive der Dokumente (auf allen Ebenen)
+            var projekt = await _context.Projekte
+                .Include(p => p.Dokumente)
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Dokumente)
+                .Include(p => p.Vorgehensmodell)
+                    .ThenInclude(vm => vm.Projektphasen)
+                        .ThenInclude(pp => pp.Aktivitaeten)
+                            .ThenInclude(a => a.Dokumente)
+                .FirstOrDefaultAsync(p => p.ProjektId == id);
+
             if (projekt != null)
             {
+                if (projekt.Dokumente != null && projekt.Dokumente.Any())
+                {
+                    _context.Dokumente.RemoveRange(projekt.Dokumente);
+                }
+
+                if (projekt.Vorgehensmodell != null && projekt.Vorgehensmodell.Projektphasen != null)
+                {
+                    foreach (var phase in projekt.Vorgehensmodell.Projektphasen)
+                    {
+                        if (phase.Dokumente != null && phase.Dokumente.Any())
+                        {
+                            _context.Dokumente.RemoveRange(phase.Dokumente);
+                        }
+
+                        if (phase.Aktivitaeten != null)
+                        {
+                            foreach (var activity in phase.Aktivitaeten)
+                            {
+                                if (activity.Dokumente != null && activity.Dokumente.Any())
+                                {
+                                    _context.Dokumente.RemoveRange(activity.Dokumente);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 _context.Projekte.Remove(projekt);
+
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
